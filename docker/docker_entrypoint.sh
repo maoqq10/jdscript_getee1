@@ -6,6 +6,10 @@ if [ $1 ]; then
     run_cmd=$1
 fi
 
+if [ !$REPO_URL ]; then
+    REPO_URL="https://gitee.com/datous/JdScripts.git"
+fi
+
 echo "设定远程仓库地址..."
 cd /scripts
 git remote set-url origin $REPO_URL
