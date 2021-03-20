@@ -116,6 +116,9 @@ function showMsg() {
   return new Promise(resolve => {
     message += `本次运行获得${$.earn}里程，${$.beans}京豆，共计${$.score}里程`
     $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
+	if($.beans>0){
+		notify.sendNotify(`${$.name}`, `账号${$.index} - ${$.nickName || $.UserName}\n${message}\n`);
+		}
     resolve()
   })
 }
@@ -381,7 +384,7 @@ function taskUrl(function_id, body = {}) {
   function getSign(data) {
     let t = +new Date()
 
-    return {sealsTs: t, seals: $.md5(`${data.taskId}${data.inviterPin?data.inviterPin:''}${t}hbpt2020`)}
+    return {sealsTs: t, seals: $.md5(`${data.taskId}${data.inviterPin?data.inviterPin:''}${t}Ea6YXT`)}
   }
   if(body['taskId']) {
     body = {...body, ...getSign(body)}
