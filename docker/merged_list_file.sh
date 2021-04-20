@@ -2,11 +2,8 @@
 50 23 */3 * * find /scripts/logs -name '*.log' | grep -v 'sharecode' | xargs rm -rf
 
 ##############短期活动##############
-# 小鸽有礼2(活动时间：2021年1月28日～2021年2月28日)
-34 9 * * * sleep $((RANDOM % $RANDOM_DELAY_MAX)); node /scripts/jd_xgyl.js |ts >> /scripts/logs/jd_jd_xgyl.log 2>&1
-
-#女装盲盒 活动时间：2021-2-19至2021-2-25
-5 7,23 19-25 2 * sleep $((RANDOM % $RANDOM_DELAY_MAX)); node /scripts/jd_nzmh.js |ts >> /scripts/logs/jd_nzmh.log 2>&1
+# 城城分现金
+34 9 * * * sleep $((RANDOM % $RANDOM_DELAY_MAX)); node 5 6-24/4 * * * node /scripts/z_city_cash.js >> /scripts/logs/z_city_cash.log 2>&1
 
 #京东极速版天天领红包 活动时间：2021-1-18至2021-3-3
 5 0,23 * * * sleep $((RANDOM % $RANDOM_DELAY_MAX)); node /scripts/jd_speed_redpocke.js |ts >> /scripts/logs/jd_speed_redpocke.log 2>&1
@@ -102,3 +99,6 @@
 
 # 必须要的默认定时任务请勿删除
 13 15 * * * docker_entrypoint.sh |ts >> /scripts/logs/default_task.log 2>&1
+
+#宠汪汪积分兑换奖品脚本
+0 0,8,16 * * * node /scripts/ jd_joy_reward.js |ts >> /scripts/logs/jd_joy_reward.log 2>&1

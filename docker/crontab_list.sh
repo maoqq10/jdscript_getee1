@@ -2,11 +2,9 @@
 50 23 */3 * * find /scripts/logs -name '*.log' | grep -v 'sharecode' | xargs rm -rf
 
 ##############短期活动##############
-# 小鸽有礼2(活动时间：2021年1月28日～2021年2月28日)
-34 9 * * * node /scripts/jd_xgyl.js >> /scripts/logs/jd_jd_xgyl.log 2>&1
+# 城城分现金
+5 6-24/4 * * * node /scripts/z_city_cash.js >> /scripts/logs/z_city_cash.log 2>&1
 
-#女装盲盒 活动时间：2021-2-19至2021-2-25
-5 7,23 19-25 2 * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
 
 #京东极速版天天领红包 活动时间：2021-1-18至2021-3-3
 5 0,23 * * * node /scripts/jd_speed_redpocke.js >> /scripts/logs/jd_speed_redpocke.log 2>&1
@@ -99,3 +97,9 @@
 1 1,6 * * * node /scripts/jd_speed_sign.js >> /scripts/logs/jd_speed_sign.log 2>&1
 # 删除优惠券(默认注释，如需要自己开启，如有误删，已删除的券可以在回收站中还原，慎用)
 #20 9 * * 6 node /scripts/jd_delCoupon.js >> /scripts/logs/jd_delCoupon.log 2>&1
+
+#宠汪汪积分兑换奖品脚本
+0 0,8,16 * * * node /scripts/ jd_joy_reward.js |ts >> /scripts/logs/jd_joy_reward.log 2>&1
+
+#京东汽车兑换奖品脚本
+0 0,8,16 * * * node /scripts/ jd_car_exchange.js |ts >> /scripts/logs/jd_car_exchange.log 2>&1
