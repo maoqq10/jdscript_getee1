@@ -30,14 +30,14 @@ const JD_API_HOST = 'https://api.m.jd.com/';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 let helpSelf = false // 循环助力，默认关闭
-let applyJdBean = 2000; //疯狂的JOY京豆兑换，目前最小值为2000京豆，默认为 0 不开启京豆兑换
+let applyJdBean = 50000; //疯狂的JOY京豆兑换，目前最小值为2000京豆，默认为 0 不开启京豆兑换
 let cookiesArr = [], cookie = '', message = '';
 const inviteCodes =
  [
   'KFPWDyIs-96XJqm0j2zeQA==@8kK2sfNlxDsxijhxsN3VKQ==@E7vsZtybbNApt7CHIXxZwqt9zd5YaBeE@P4BPzNhZ2OAjwKZeYKOSVqt9zd5YaBeE@nuZUrgQAo26gQkrP9wQK3Q==@_xHLVu4dJEuqT51cSQly2Q==',
   'KFPWDyIs-96XJqm0j2zeQA==@8kK2sfNlxDsxijhxsN3VKQ==@E7vsZtybbNApt7CHIXxZwqt9zd5YaBeE@P4BPzNhZ2OAjwKZeYKOSVqt9zd5YaBeE@nuZUrgQAo26gQkrP9wQK3Q==@_xHLVu4dJEuqT51cSQly2Q==',
 ];
-const randomCount = $.isNode() ? 10 : 5;
+const randomCount = 0 ;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {

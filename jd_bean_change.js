@@ -24,7 +24,7 @@ cron "2 9 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_
 ============小火箭=========
 京豆变动通知 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_bean_change.js, cronexpr="2 9 * * *", timeout=3600, enable=true
  */
-const $ = new Env('京豆变动通知');
+const $ = new Env('京豆红包过期通知');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -90,7 +90,7 @@ async function showMsg() {
   if ($.errorMsg) return
   if ($.isNode()) {
 	if((`${DND}` === 'false')||($.message!=''))
-		await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `账号${$.index}：${$.nickName || $.UserName}\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}京豆 🐶${$.message}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
+		await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `账号${$.index}：${$.nickName || $.UserName}\n${$.message}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
 	else {console.log('您设置的是京豆变动通知免打扰，只在有过期京豆的时候进行通知！')}
  }
   $.msg($.name, '', `账号${$.index}：${$.nickName || $.UserName}\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}京豆 🐶${$.message}`, {"open-url": "https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean"});
@@ -290,7 +290,7 @@ function redPacket() {
             $.balance = data.balance
             $.expiredBalance = data.expiredBalance || 0;
 			if($.expiredBalance >= 3.00){
-            $.message += `\n当前红包：${$.balance}元🧧`;
+           // $.message += `\n当前红包：${$.balance}元🧧`;
             $.message += `\n今日将过期：${$.expiredBalance}元红包🧧`;
 			}
           } else {

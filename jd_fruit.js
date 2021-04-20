@@ -114,7 +114,7 @@ async function jdFruit() {
       await getWaterFriendGotAward();//领取为2好友浇水奖励
       await duck();
       await doTenWaterAgain();//再次浇水
-      await predictionFruit();//预测水果成熟时间
+    //  await predictionFruit();//预测水果成熟时间
     } else {
       console.log(`初始化农场数据异常, 请登录京东 app查看农场0元水果功能是否正常,农场初始化数据: ${JSON.stringify($.farmInfo)}`);
       message = `【京东账号${$.index}】 ${$.nickName || $.UserName}\n【数据异常】请手动登录京东app查看此账号${$.name}是否正常`;
