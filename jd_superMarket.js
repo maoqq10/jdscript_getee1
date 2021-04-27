@@ -61,7 +61,7 @@ let shareCodes = [ // IOS本地脚本用户这个列表填入你要助力的好�
       $.blueCionTimes = 0;
       $.isLogin = true;
       $.nickName = '';
-      await TotalBean();
+      // await TotalBean()();
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});

@@ -68,7 +68,7 @@ if ($.isNode()) {
         $.index = i + 1;
         $.isLogin = true;
         $.nickName = '';
-        await TotalBean();
+        // await TotalBean()();
         console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
         if (!$.isLogin) {
          $.log(`\n京东账号${$.index} ${$.nickName || $.UserName}\ncookie已过期,请重新登录获取\n`)
