@@ -1,6 +1,6 @@
 /*
 东东萌宠 更新地址： https://gitee.com/lxk0301/jd_scripts/raw/master/jd_pet.js
-更新时间：2021-04-9
+更新时间：2021-05-21
 活动入口：京东APP我的-更多工具-东东萌宠
 已支持IOS多京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -36,10 +36,10 @@ let shareCodes = [ // IOS本地脚本用户这个列表填入你要助力的好�
   'MTE1NDUyMjEwMDAwMDAwNDIwNDAzMTk=@MTE1NDQ5MzYwMDAwMDAwNDI1MDM1MDc=@MTE1NDQ5OTUwMDAwMDAwNDIwOTQxMDc=@MTAxODc2NTEzNTAwMDAwMDAyMTcwOTI1Nw==@MTAxODcxOTI2NTAwMDAwMDAyNDM3MzM1Mw==@MTE1NDQ5OTIwMDAwMDAwNDI3Nzc4MDc=@MTE1NDAxNzgwMDAwMDAwNDI4OTU5OTk=@MTE1NDQ5OTUwMDAwMDAwNDMyMzc0NDk=MTE1NDUwMTI0MDAwMDAwMDQzMjQ2OTM5MTE1NDUyMjEwMDAwMDAwNDM1NDIyMjc=',
 ]
 let message = '', subTitle = '', option = {};
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
+let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let goodsUrl = '', taskInfoKey = [];
-let randomCount = 0 ;
+let randomCount = 0;
 !(async () => {
   await requireConfig();
   if (!cookiesArr[0]) {
@@ -106,7 +106,7 @@ async function jdPet() {
       if ($.petInfo.petStatus === 5) {
         await slaveHelp();//可以兑换而没有去兑换,也能继续助力好友
         option['open-url'] = "openApp.jdMobile://";
-        $.msg($.name, `【提醒⏰】${$.petInfo.goodsInfo.goodsName}已可领取`, '请去京东APP或微信小程序查看', option);
+        $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.petInfo.goodsInfo.goodsName}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
         if ($.isNode()) {
           await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}奖品已可领取`, `京东账号${$.index} ${$.nickName}\n${$.petInfo.goodsInfo.goodsName}已可领取`);
         }
@@ -114,7 +114,7 @@ async function jdPet() {
       } else if ($.petInfo.petStatus === 6) {
         await slaveHelp();//已领取红包,但未领养新的,也能继续助力好友
         option['open-url'] = "openApp.jdMobile://";
-        $.msg($.name, `【提醒⏰】已领取红包,但未继续领养新的物品`, '请去京东APP或微信小程序继续领养', option);
+        $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】已领取红包,但未继续领养新的物品\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
         if ($.isNode()) {
           await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}奖品已可领取`, `京东账号${$.index} ${$.nickName}\n已领取红包,但未继续领养新的物品`);
         }
@@ -452,7 +452,7 @@ async function showMsg() {
 }
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `http://jd.turinglabs.net/api/v2/jd/pet/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `http://share.turinglabs.net/api/v3/pet/query/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
