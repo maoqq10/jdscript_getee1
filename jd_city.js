@@ -254,10 +254,10 @@ function city_lotteryAward() {
   })
 }
 function addShareCode($pt_pin, $code) {
-    console.log(`addShareCode`,$pt_pin, $code)
+    //console.log(`addShareCode`,$pt_pin, $code)
     return new Promise(async resolve => {
       $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=city&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
-          console.log('addShareCode result:', err, data);
+          //console.log('addShareCode result:', err, data);
         try {
           if (err) {
             console.log(`${JSON.stringify(err)}`)
