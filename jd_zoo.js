@@ -128,11 +128,11 @@ function zoo_getTaskDetail(shopSign = "",appSign = "",timeout = 0){
       //}
       $.post(url, async (err, resp, data) => {
         try {
-          console.log('zoo_getTaskDetail:' + data)
+          // console.log('zoo_getTaskDetail:' + data)
           data = JSON.parse(data);
           if (shopSign === "") {
             shopSign = '""'
-            if (appSign === "" && data.data.result) console.log(`您的个人助力码：${data.data.result.inviteId}`)
+            if (data.data.result && data.data.result.inviteId) console.log(`您的个人助力码：${data.data.result.inviteId}`)
           }
           if (!data.data.result) return
           for (let i = 0;i < data.data.result.taskVos.length;i ++) {
