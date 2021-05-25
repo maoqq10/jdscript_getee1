@@ -150,7 +150,7 @@ function getInfo(inviteId, flag = false) {
               if (data.data && data['data']['bizCode'] === 0) {
                 if (flag) console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
                 if(data.data && data.data.result.userActBaseInfo && data.data.result.userActBaseInfo.inviteId) {
-                    addShareCode($.UserName, data.data.result.userActBaseInfo.inviteId);
+                   addShareCode($.UserName, data.data.result.userActBaseInfo.inviteId);
                 }
                 for(let vo of data.data.result && data.data.result.mainInfos || []){
                   if (vo && vo.remaingAssistNum === 0 && vo.status === "1") {
@@ -254,9 +254,10 @@ function city_lotteryAward() {
   })
 }
 function addShareCode($pt_pin, $code) {
-    console.log(`开始`)
+    console.log(`addShareCode`,$pt_pin, $code)
     return new Promise(async resolve => {
       $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=city&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
+          console.log('addShareCode result:', err, data);
         try {
           if (err) {
             console.log(`${JSON.stringify(err)}`)
