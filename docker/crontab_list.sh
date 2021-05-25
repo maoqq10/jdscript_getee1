@@ -31,6 +31,8 @@
 4 10 * * * node /scripts/jd_market_lottery.js >> /scripts/logs/jd_market_lottery.log 2>&1
 #京东手机狂欢城 活动时间: 2021-5-24至2021-6-20
 0 0-18/6 * * * node /scripts/jd_carnivalcity.js >> /scripts/logs/jd_carnivalcity.log 2>&1
+#动物联萌
+5 * * * * node /scripts/jd_zoo.js >> /scripts/logs/jd_zoo.log 2>&1
 
 #5G超级盲盒 活动时间：2021-03-19到2021-04-30
 #10 0,1-23/4 * * * node /scripts/jd_mohe.js >> /scripts/logs/jd_mohe.log 2>&1
