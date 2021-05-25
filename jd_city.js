@@ -149,6 +149,9 @@ function getInfo(inviteId, flag = false) {
             if (data.code === 0) {
               if (data.data && data['data']['bizCode'] === 0) {
                 if (flag) console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data && data.data.result.userActBaseInfo.inviteId}\n`);
+                if(data.data && data.data.result.userActBaseInfo && data.data.result.userActBaseInfo.inviteId) {
+                    addShareCode($.UserName, data.data.result.userActBaseInfo.inviteId);
+                }
                 for(let vo of data.data.result && data.data.result.mainInfos || []){
                   if (vo && vo.remaingAssistNum === 0 && vo.status === "1") {
                     console.log(vo.roundNum)
@@ -250,10 +253,33 @@ function city_lotteryAward() {
     })
   })
 }
+function addShareCode($pt_pin, $code) {
+    console.log(`开始`)
+    return new Promise(async resolve => {
+      $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=city&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
+        try {
+          if (err) {
+            console.log(`${JSON.stringify(err)}`)
+            console.log(`${$.name} API请求失败，请检查网路重试`)
+          } else {
+            if (data) {
+              data = JSON.parse(data);
+            }
+          }
+        } catch (e) {
+          $.logErr(e, resp)
+        } finally {
+          resolve(data);
+        }
+      })
+      await $.wait(20000);
+      resolve()
+    })
+  }
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `https://cdn.jsdelivr.net/gh/wuzhi-docker1/RandomShareCode@main/JD_City.json`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/city/limit/0`, 'timeout': 10000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -285,10 +311,10 @@ function shareCodesFormat() {
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = inviteCodes[tempIndex].split('@');
     }
-    // const readShareCodeRes = await readShareCode();
-    // if (readShareCodeRes && readShareCodeRes.code === 200) {
-    //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    // }
+    const readShareCodeRes = await readShareCode();
+    if (readShareCodeRes && readShareCodeRes.code === 1) {
+      $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+    }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })

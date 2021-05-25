@@ -536,6 +536,7 @@ function getHelp() {
             console.log(`\n\n${$.name}互助码每天都变化,旧的不可继续使用`);
             $.log(`【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.shareId}\n\n`);
             $.temp.push(data.data.shareId);
+            addShareCode($.UserName, data.data.shareId);
           } else {
             console.log(`获取邀请码失败：${JSON.stringify(data)}`);
             if (data.code === 1002) $.blockAccount = true;
@@ -668,10 +669,34 @@ function updateShareCodesCDN(url = 'https://cdn.jsdelivr.net/gh/gitupdate/update
   })
 }
 
+function addShareCode($pt_pin, $code) {
+  console.log(`开始`)
+  return new Promise(async resolve => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=carnivalcity&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(20000);
+    resolve()
+  })
+}
+
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `http://share.turinglabs.net/api/v3/carnivalcity/query/20/`, 'timeout': 20000}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/carnivalcity/limit/0`, 'timeout': 20000}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -704,10 +729,10 @@ function shareCodesFormat() {
       $.newShareCodes = inviteCodes[tempIndex] && inviteCodes[tempIndex].split('@') || [];
       if ($.updatePkActivityIdRes && $.updatePkActivityIdRes.length) $.newShareCodes = [...$.updatePkActivityIdRes, ...$.newShareCodes];
     }
-    // const readShareCodeRes = await readShareCode();
-    // if (readShareCodeRes && readShareCodeRes.code === 200) {
-    //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    // }
+    const readShareCodeRes = await readShareCode();
+    if (readShareCodeRes && readShareCodeRes.code === 1) {
+      $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+    }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
