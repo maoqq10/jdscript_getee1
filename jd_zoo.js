@@ -128,7 +128,7 @@ function zoo_getTaskDetail(shopSign = "",appSign = "",timeout = 0){
       //}
       $.post(url, async (err, resp, data) => {
         try {
-          //console.log('zoo_getTaskDetail:' + data)
+          console.log('zoo_getTaskDetail:' + data)
           data = JSON.parse(data);
           if (shopSign === "") {
             shopSign = '""'
