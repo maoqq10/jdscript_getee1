@@ -121,6 +121,7 @@ async function jdPet() {
         return
       }
       console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.petInfo.shareCode}\n`);
+      addShareCode($.UserName, $.petInfo.shareCode);
       await taskInit();
       if ($.taskInit.resultCode === '9999' || !$.taskInit.result) {
         console.log('初始化任务异常, 请稍后再试');
@@ -450,16 +451,17 @@ async function showMsg() {
     $.log(`\n${message}\n`);
   }
 }
-function readShareCode() {
+function addShareCode($pt_pin, $code) {
+  //console.log(`addShareCode`,$pt_pin, $code)
   return new Promise(async resolve => {
-    $.get({url: `http://share.turinglabs.net/api/v3/pet/query/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=pet&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
+        //console.log('addShareCode result:', err, data);
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
             data = JSON.parse(data);
           }
         }
@@ -469,9 +471,32 @@ function readShareCode() {
         resolve(data);
       }
     })
-    await $.wait(10000);
+    await $.wait(20000);
     resolve()
   })
+}
+function readShareCode() {
+console.log(`开始`)
+return new Promise(async resolve => {
+  $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/pet/limit/0`, 'timeout': 10000}, (err, resp, data) => {
+    try {
+      if (err) {
+        console.log(`${JSON.stringify(err)}`)
+        console.log(`${$.name} API请求失败，请检查网路重试`)
+      } else {
+        if (data) {
+          data = JSON.parse(data);
+        }
+      }
+    } catch (e) {
+      $.logErr(e, resp)
+    } finally {
+      resolve(data);
+    }
+  })
+  await $.wait(10000);
+  resolve()
+})
 }
 function shareCodesFormat() {
   return new Promise(async resolve => {
@@ -487,7 +512,7 @@ function shareCodesFormat() {
     //因好友助力功能下线。故暂时屏蔽
     const readShareCodeRes = await readShareCode();
     //const readShareCodeRes = null;
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
+    if (readShareCodeRes && readShareCodeRes.code === 1) {
       newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
     }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)

@@ -94,6 +94,7 @@ async function jdPlantBean() {
       const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
       $.myPlantUuid = getParam(shareUrl, 'plantUuid')
       console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
+      addShareCode($.UserName, $.myPlantUuid);
       roundList = $.plantBeanIndexResult.data.roundList;
       currentRoundId = roundList[1].roundId;//本期的roundId
       lastRoundId = roundList[0].roundId;//上期的roundId
@@ -529,16 +530,17 @@ async function helpShare(plantUuid) {
 async function plantBeanIndex() {
   $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
 }
-function readShareCode() {
+function addShareCode($pt_pin, $code) {
+  //console.log(`addShareCode`,$pt_pin, $code)
   return new Promise(async resolve => {
-    $.get({url: `http://jd.turinglabs.net/api/v2/jd/bean/read/${randomCount}/`, timeout: 10000}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=plantBean&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
+        //console.log('addShareCode result:', err, data);
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
             data = JSON.parse(data);
           }
         }
@@ -548,9 +550,32 @@ function readShareCode() {
         resolve(data);
       }
     })
-    await $.wait(15000);
+    await $.wait(20000);
     resolve()
   })
+}
+function readShareCode() {
+console.log(`开始`)
+return new Promise(async resolve => {
+  $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/plantBean/limit/0`, 'timeout': 10000}, (err, resp, data) => {
+    try {
+      if (err) {
+        console.log(`${JSON.stringify(err)}`)
+        console.log(`${$.name} API请求失败，请检查网路重试`)
+      } else {
+        if (data) {
+          data = JSON.parse(data);
+        }
+      }
+    } catch (e) {
+      $.logErr(e, resp)
+    } finally {
+      resolve(data);
+    }
+  })
+  await $.wait(10000);
+  resolve()
+})
 }
 //格式化助力码
 function shareCodesFormat() {
@@ -565,7 +590,7 @@ function shareCodesFormat() {
       newShareCodes = shareCodes[tempIndex].split('@');
     }
     const readShareCodeRes = await readShareCode();
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
+    if (readShareCodeRes && readShareCodeRes.code === 1) {
       newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
     }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)

@@ -134,6 +134,10 @@ function index(info=false) {
               }
               // console.log(`您的助力码为${data.data.result.inviteCode}`)
               //console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data.data.result.inviteCode}\n`);
+              if(data.data && data.data.result && data.data.result.inviteCode){
+                addShareCode($.UserName, data.data.result.inviteCode);
+              }
+              
               let helpInfo = {
                 'inviteCode': data.data.result.inviteCode,
                 'shareDate': data.data.result.shareDate
@@ -343,17 +347,17 @@ function showMsg() {
     resolve()
   })
 }
-function readShareCode() {
-  console.log(`开始`)
+function addShareCode($pt_pin, $code) {
+  //console.log(`addShareCode`,$pt_pin, $code)
   return new Promise(async resolve => {
-    $.get({url: `https://code.chiang.fun/api/v1/jd/jdcash/read/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=cash&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
+        //console.log('addShareCode result:', err, data);
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
             data = JSON.parse(data);
           }
         }
@@ -363,9 +367,32 @@ function readShareCode() {
         resolve(data);
       }
     })
-    await $.wait(10000);
+    await $.wait(20000);
     resolve()
   })
+}
+function readShareCode() {
+console.log(`开始`)
+return new Promise(async resolve => {
+  $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/cash/limit/0`, 'timeout': 10000}, (err, resp, data) => {
+    try {
+      if (err) {
+        console.log(`${JSON.stringify(err)}`)
+        console.log(`${$.name} API请求失败，请检查网路重试`)
+      } else {
+        if (data) {
+          data = JSON.parse(data);
+        }
+      }
+    } catch (e) {
+      $.logErr(e, resp)
+    } finally {
+      resolve(data);
+    }
+  })
+  await $.wait(10000);
+  resolve()
+})
 }
 //格式化助力码
 function shareCodesFormat() {
@@ -382,7 +409,7 @@ function shareCodesFormat() {
       $.newShareCodes = [...(authorCode.map((item, index) => authorCode[index] = item['inviteCode'])), ...$.newShareCodes];
     }
     const readShareCodeRes = await readShareCode();
-    if (readShareCodeRes && readShareCodeRes.code === 200) {
+    if (readShareCodeRes && readShareCodeRes.code === 1) {
       $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
     }
     $.newShareCodes.map((item, index) => $.newShareCodes[index] = { "inviteCode": item, "shareDate": $.shareDate })
