@@ -75,13 +75,13 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       $.index = i + 1;
       $.freeTimes = 0;
       $.prizeBeanCount = 0;
-      $.totalBeanCount = 0;
+      $.TotalBean()Count = 0;
       $.superShakeBeanNum = 0;
       $.moFangBeanNum = 0;
       $.isLogin = true;
       $.nickName = '';
       message = ''
-      // await TotalBean()();
+      // TotalBean();
       console.log(`\n********开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -227,7 +227,7 @@ async function shaking() {
       if (shakeBeanRes.data && shakeBeanRes.data.prizeBean) {
         console.log(`恭喜你，中奖了，获得${shakeBeanRes.data.prizeBean.count}京豆\n`)
         $.prizeBeanCount += shakeBeanRes.data.prizeBean.count;
-        $.totalBeanCount = shakeBeanRes.data.luckyBox.totalBeanCount;
+        $.TotalBean()Count = shakeBeanRes.data.luckyBox.TotalBean()Count;
       } else if (shakeBeanRes.data && shakeBeanRes.data.prizeCoupon) {
         console.log(`获得优惠券：${shakeBeanRes.data.prizeCoupon['limitStr']}\n`)
       } else {
@@ -1384,7 +1384,7 @@ function pg_interact_interface_invoke(body) {
 }
 
 
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",

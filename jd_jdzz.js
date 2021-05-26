@@ -62,7 +62,7 @@ let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      // await TotalBean()();
+      // TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -130,7 +130,7 @@ async function jdWish() {
 
   await helpFriends()
   await getUserInfo()
-  $.nowBean = parseInt($.totalBeanNum)
+  $.nowBean = parseInt($.TotalBean()Num)
   $.nowNum = parseInt($.totalNum)
   for (let i = 0; i < $.taskList.length; ++i) {
     let task = $.taskList[i]
@@ -152,9 +152,9 @@ async function jdWish() {
 
 function showMsg() {
   return new Promise(async resolve => {
-    message += `本次获得${parseInt($.totalBeanNum) - $.nowBean}京豆，${parseInt($.totalNum) - $.nowNum}金币\n`
-    message += `累计获得${$.totalBeanNum}京豆，${$.totalNum}金币\n可兑换${$.totalNum / 10000}元无门槛红包\n兑换入口:京东赚赚微信小程序->赚好礼->金币提现`
-    if (parseInt($.totalBeanNum) - $.nowBean > 0) {
+    message += `本次获得${parseInt($.TotalBean()Num) - $.nowBean}京豆，${parseInt($.totalNum) - $.nowNum}金币\n`
+    message += `累计获得${$.TotalBean()Num}京豆，${$.totalNum}金币\n可兑换${$.totalNum / 10000}元无门槛红包\n兑换入口:京东赚赚微信小程序->赚好礼->金币提现`
+    if (parseInt($.TotalBean()Num) - $.nowBean > 0) {
       //IOS运行获得京豆大于0通知
       $.msg($.name, '', `京东账号${$.index} ${$.nickName}\n${message}`);
     } else {
@@ -342,7 +342,7 @@ function getTaskList(flag = false) {
             data = JSON.parse(data);
             $.taskList = data.data.taskDetailResList
             $.totalNum = data.data.totalNum
-            $.totalBeanNum = data.data.totalBeanNum
+            $.TotalBean()Num = data.data.TotalBean()Num
             if (flag && $.taskList.filter(item => !!item && item['taskId']=== 3) && $.taskList.filter(item => !!item && item['taskId']=== 3).length) {
               console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.taskList.filter(item => !!item && item['taskId']=== 3)[0]['itemId']}\n`);
             }
@@ -515,7 +515,7 @@ function taskPostUrl(function_id, body = {}) {
   }
 }
 
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

@@ -31,9 +31,9 @@ let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, n
 let shareCodes =
  [ // 这个列表填入你要助力的好友的shareCode
    //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
-  '363302c018d241df923eeef1d9faecf9@99c857d2906c4ad8af0527efc367d4de@8393c56cadcd4639bb65095132f3bab7@ea47d7cb7a0c4751bc10927f3a49985a@e0d312aae7694c8393feb74c8a4955dc@d94c0955209a45fd9e6849a6d338a821@adbf7430fa0e48ff90302b12cf7b85a2@0c680e4936c7448d870e30690780aa9d231ecb1079174a00851e57f7b187ad9f',
+  //'363302c018d241df923eeef1d9faecf9@99c857d2906c4ad8af0527efc367d4de@8393c56cadcd4639bb65095132f3bab7@ea47d7cb7a0c4751bc10927f3a49985a@e0d312aae7694c8393feb74c8a4955dc@d94c0955209a45fd9e6849a6d338a821@adbf7430fa0e48ff90302b12cf7b85a2@0c680e4936c7448d870e30690780aa9d231ecb1079174a00851e57f7b187ad9f',
   //账号二的好友shareCode,不同好友的shareCode中间用@符号隔开
-  '363302c018d241df923eeef1d9faecf9@99c857d2906c4ad8af0527efc367d4de@8393c56cadcd4639bb65095132f3bab7@ea47d7cb7a0c4751bc10927f3a49985a@e0d312aae7694c8393feb74c8a4955dc@d94c0955209a45fd9e6849a6d338a821@adbf7430fa0e48ff90302b12cf7b85a2@0c680e4936c7448d870e30690780aa9d231ecb1079174a00851e57f7b187ad9f',
+  //'363302c018d241df923eeef1d9faecf9@99c857d2906c4ad8af0527efc367d4de@8393c56cadcd4639bb65095132f3bab7@ea47d7cb7a0c4751bc10927f3a49985a@e0d312aae7694c8393feb74c8a4955dc@d94c0955209a45fd9e6849a6d338a821@adbf7430fa0e48ff90302b12cf7b85a2@0c680e4936c7448d870e30690780aa9d231ecb1079174a00851e57f7b187ad9f',
 ]
 let message = '', subTitle = '', option = {}, isFruitFinished = false;
 const retainWater = 100;//保留水滴大于多少g,默认100g;
@@ -55,7 +55,7 @@ const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
-      // await TotalBean()();
+      // TotalBean();
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -647,6 +647,7 @@ async function masterHelpShare() {
         console.log(`【助力好友结果】: 之前给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
       } else if ($.helpResult.helpResult.code === '10') {
         console.log(`【助力好友结果】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
+        finishShareCode(code);
       } else {
         console.log(`助力其他情况：${JSON.stringify($.helpResult.helpResult)}`);
       }
@@ -1251,6 +1252,30 @@ function timeFormat(time) {
   }
   return date.getFullYear() + '-' + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() >= 10 ? date.getDate() : '0' + date.getDate());
 }
+function finishShareCode($code) {
+  //console.log(`addShareCode`,$pt_pin, $code)
+  return new Promise(async resolve => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/finish?code=${$code}`, 'timeout': 20000}, (err, resp, data) => {
+        //console.log('addShareCode result:', err, data);
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(20000);
+    resolve()
+  })
+}
 function addShareCode($pt_pin, $code) {
   //console.log(`addShareCode`,$pt_pin, $code)
   return new Promise(async resolve => {
@@ -1378,7 +1403,7 @@ function requireConfig() {
     resolve()
   })
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

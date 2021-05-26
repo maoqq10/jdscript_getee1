@@ -60,7 +60,7 @@ let allMessage = '';
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      await TotalBean()();
+      TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -213,7 +213,8 @@ function helpFriend(helpInfo) {
               console.log(data.data.bizMsg)
               $.canHelp = false
             } else{
-              console.log(data.data.bizMsg)
+              console.log('助力失败', data.data)
+              //finishShareCode(code['inviteCode'])
             }
           }
         }
@@ -351,6 +352,30 @@ function addShareCode($pt_pin, $code) {
   //console.log(`addShareCode`,$pt_pin, $code)
   return new Promise(async resolve => {
     $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=cash&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
+        //console.log('addShareCode result:', err, data);
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(20000);
+    resolve()
+  })
+}
+function finishShareCode($code) {
+  //console.log(`addShareCode`,$pt_pin, $code)
+  return new Promise(async resolve => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/finish?code=${$code}`, 'timeout': 20000}, (err, resp, data) => {
         //console.log('addShareCode result:', err, data);
       try {
         if (err) {
@@ -521,7 +546,7 @@ function getAuthorShareCode2(url = "https://cdn.jsdelivr.net/gh/gitupdate/update
     })
   })
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

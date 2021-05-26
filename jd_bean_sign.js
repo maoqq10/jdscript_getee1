@@ -44,7 +44,7 @@ if ($.isNode()) {
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
       $.index = i + 1;
       $.nickName = '';
-      // await TotalBean()();
+      // TotalBean();
       console.log(`*****************开始京东账号${$.index} ${$.nickName || $.UserName}京豆签到*******************\n`);
       await changeFile(content);
       await execSign();
@@ -176,7 +176,7 @@ async function deleteFile(path) {
     // console.log('unlinkRes', unlinkRes)
   }
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

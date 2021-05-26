@@ -62,7 +62,7 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
       $.nickName = '';
       $.beans = 0
       message = ''
-      // await TotalBean()();
+      // TotalBean();
       await shareCodesFormat();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
@@ -335,7 +335,7 @@ function readShareCode() {
     resolve()
   })
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

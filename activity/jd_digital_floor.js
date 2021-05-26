@@ -55,7 +55,7 @@ const JD_API_HOST = 'https://digital-floor.m.jd.com/adf/index/';
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      // await TotalBean()();
+      // TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -354,7 +354,7 @@ function taskUrl(function_id) {
       'user-agent': 'jdapp;iPhone;9.2.0;14.0;53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2;network/wifi;supportApplePay/3;hasUPPay/1;pushNoticeIsOpen/0;model/iPhone10,2;addressid/138413818;hasOCPay/0;appBuild/167408;supportBestPay/1;jdSupportDarkMode/0;pv/1710.16;apprpd/WorthBuy_List;ref/JDWebViewController;psq/2;ads/;psn/53f4d9c70c1c81f1c8769d2fe2fef0190a3f60d2|5870;jdv/0|kong|t_1000089893_|tuiguang|9a75f97593f344eb9c46b99e196608d2|1605846323;adk/;app_device/IOS;pap/JA2015_311210|9.2.0|IOS 14.0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1',}
   }
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

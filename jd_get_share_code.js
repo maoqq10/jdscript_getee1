@@ -47,7 +47,7 @@ if ($.isNode()) {
       $.isLogin = true;
       $.nickName = '';
       message = '';
-      // await TotalBean()();
+      // TotalBean();
       if (!$.isLogin) {
         continue
       }
@@ -633,7 +633,7 @@ function safeGet(data) {
     return false;
   }
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

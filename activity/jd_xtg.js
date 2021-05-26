@@ -81,7 +81,7 @@ const JD_API_HOST = "https://urvsaggpt.m.jd.com/guardianstar";
       $.isLogin = true;
       $.nickName = "";
       $.shareID = [];
-      // await TotalBean()();
+      // TotalBean();
       console.log(
           `\n===============开始【京东账号${$.index}】${
               $.nickName || $.UserName
@@ -123,7 +123,7 @@ const JD_API_HOST = "https://urvsaggpt.m.jd.com/guardianstar";
         // await doSupport(shareID[index]);
       }
       $.allShareId[i] = $.shareID;
-      // const afterTotal = await TotalBean();
+      // const afterTotal = TotalBean();
       // $.jdNum = afterTotal['base'].jdNum;
       // await showMsg();
     }
@@ -384,7 +384,7 @@ function doSupport(shareId) {
     });
   });
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async (resolve) => {
     const options = {
       url: `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

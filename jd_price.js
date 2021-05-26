@@ -67,7 +67,7 @@ if ($.isNode()) {
       $.index = i + 1;
       $.isLogin = false;
       $.nickName = '';
-      // await TotalBean()();
+      // TotalBean();
       if (!$.isLogin) {
         $.msg(
           $.name,
@@ -488,7 +488,7 @@ function showMsg() {
   }
 }
 
-function totalBean() {
+function TotalBean()() {
   return new Promise((resolve) => {
     const options = {
       url: `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

@@ -188,7 +188,7 @@ if ($.isNode()) {
       $.nickName = '';
       message = '';
       $.GROWTH_REWARD_BEAN = 0;//解锁等级奖励的京豆
-      // await TotalBean()();
+      // TotalBean();
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -213,7 +213,7 @@ if ($.isNode()) {
         $.index = i + 1;
         $.isLogin = true;
         $.nickName = '';
-        // await TotalBean()();
+        // TotalBean();
         console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
         if (!$.isLogin) {
           $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -235,7 +235,7 @@ if ($.isNode()) {
         $.index = i + 1;
         $.isLogin = true;
         $.nickName = '';
-        // await TotalBean()();
+        // TotalBean();
         console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
         if (!$.isLogin) {
           $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -534,8 +534,8 @@ function getUserBean() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            if (data.success && data.data && data.data.totalBeans)
-              $.bean = data.data.totalBeans
+            if (data.success && data.data && data.data.TotalBean()s)
+              $.bean = data.data.TotalBean()s
             else
               console.log(`获取信息失败`)
           }
@@ -748,7 +748,7 @@ function safeGet(data) {
   }
 }
 
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

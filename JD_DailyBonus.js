@@ -206,7 +206,7 @@ async function all() {
   await Promise.all([
     TotalSteel(), //总钢镚查询
     TotalCash(), //总红包查询
-    TotalBean(), //总京豆查询
+    TotalBean()(), //总京豆查询
     TotalSubsidy(), //总金贴查询
     TotalMoney() //总现金查询
   ]);
@@ -238,7 +238,7 @@ function notify() {
       }
       var Cash = merge.TotalCash && merge.TotalCash.TCash ? `${merge.TotalCash.TCash}红包` : ""
       var Steel = merge.TotalSteel && merge.TotalSteel.TSteel ? `${merge.TotalSteel.TSteel}钢镚` : ``
-      var beans = merge.TotalBean && merge.TotalBean.Qbear ? `${merge.TotalBean.Qbear}京豆${Steel?`, `:``}` : ""
+      var beans = merge.TotalBean() && merge.TotalBean().Qbear ? `${merge.TotalBean().Qbear}京豆${Steel?`, `:``}` : ""
       var Money = merge.TotalMoney && merge.TotalMoney.TMoney ? `${merge.TotalMoney.TMoney}现金${Cash?`, `:``}` : ""
       var Subsidy = merge.TotalSubsidy && merge.TotalSubsidy.TSubsidy ? `${merge.TotalSubsidy.TSubsidy}金贴${Money||Cash?", ":""}` : ""
       var Tbean = bean ? `${bean.toFixed(0)}京豆${steel?", ":""}` : ""
@@ -254,7 +254,7 @@ function notify() {
       var three = TCash || TSubsidy || TMoney ? `【其他奖励】:  ${TCash+TSubsidy+TMoney}\n` : ``
       var four = `【账号总计】:  ${beans+Steel}${beans||Steel?`\n`:`获取失败\n`}`
       var five = `【其他总计】:  ${Subsidy+Money+Cash}${Subsidy||Money||Cash?`\n`:`获取失败\n`}`
-      var DName = merge.TotalBean && merge.TotalBean.nickname ? merge.TotalBean.nickname : "获取失败"
+      var DName = merge.TotalBean() && merge.TotalBean().nickname ? merge.TotalBean().nickname : "获取失败"
       var cnNum = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
       const numFix = !Key && !DualKey ? DualAccount - 2 : Key && DualKey ? DualAccount : DualAccount - 1 || DualAccount
       const Name = DualKey || OtherKey ? `【签到号${cnNum[numFix]||numFix}】:  ${DName}\n` : ``
@@ -1566,8 +1566,8 @@ function TotalSteel() {
   });
 }
 
-function TotalBean() {
-  merge.TotalBean = {};
+function TotalBean()() {
+  merge.TotalBean() = {};
   return new Promise(resolve => {
     if (disable("Qbear")) return resolve()
     $nobyda.get({
@@ -1581,16 +1581,16 @@ function TotalBean() {
         const Details = LogDetails ? "response:\n" + data : '';
         const cc = JSON.parse(data)
         if (cc.msg == 'success' && cc.retcode == 0) {
-          merge.TotalBean.nickname = cc.data.userInfo.baseInfo.nickname || ""
-          merge.TotalBean.Qbear = cc.data.assetInfo.beanNum || 0
+          merge.TotalBean().nickname = cc.data.userInfo.baseInfo.nickname || ""
+          merge.TotalBean().Qbear = cc.data.assetInfo.beanNum || 0
           $nobyda.headUrl = cc.data.userInfo.baseInfo.headImageUrl || ""
           console.log(`\n京东-总京豆查询成功 ${Details}`)
         } else {
-          merge.TotalBean.nickname = cc.retcode == 1001 ? "Cookie失效 ‼️" : "";
+          merge.TotalBean().nickname = cc.retcode == 1001 ? "Cookie失效 ‼️" : "";
           console.log(`\n京东-总京豆查询失败 ${Details}`)
         }
       } catch (eor) {
-        $nobyda.AnError("账户京豆-查询", "TotalBean", eor, response, data)
+        $nobyda.AnError("账户京豆-查询", "TotalBean()", eor, response, data)
       } finally {
         resolve()
       }

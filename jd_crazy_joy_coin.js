@@ -68,7 +68,7 @@ if ($.isNode()) {
         $.index = i + 1;
         $.isLogin = true;
         $.nickName = '';
-        // await TotalBean()();
+        // TotalBean();
         console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
         if (!$.isLogin) {
          $.log(`\n京东账号${$.index} ${$.nickName || $.UserName}\ncookie已过期,请重新登录获取\n`)
@@ -476,8 +476,8 @@ function getUserBean() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            if (data.success && data.data && data.data.totalBeans)
-              $.bean = data.data.totalBeans
+            if (data.success && data.data && data.data.TotalBean()s)
+              $.bean = data.data.TotalBean()s
             else
               console.log(`京豆信息获取信息失败`)
           }
@@ -673,7 +673,7 @@ function safeGet(data) {
   }
 }
 
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

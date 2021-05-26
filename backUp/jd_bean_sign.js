@@ -46,7 +46,7 @@ if ($.isNode()) {
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
         $.index = i + 1;
         $.nickName = '';
-        // await TotalBean()();
+        // TotalBean();
         console.log(`*****************开始京东账号${$.index} ${$.nickName || $.UserName}京豆签到*******************\n`);
         console.log(`⚠️⚠️⚠️⚠️目前Bark APP推送通知消息对推送内容长度有限制，如推送通知中包含此推送方式脚本会默认转换成简洁内容推送 ⚠️⚠️⚠️⚠️\n`)
         await changeFile(content);
@@ -208,7 +208,7 @@ async function deleteFile(path) {
     // console.log('unlinkRes', unlinkRes)
   }
 }
-function TotalBean() {
+function TotalBean()() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
