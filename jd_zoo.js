@@ -925,7 +925,7 @@ function zoo_pk_getHomeData(body = "",timeout = 0) {
 
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/fruit/limit/0`, timeout: 10000,}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/zoogroup/limit/0`, timeout: 10000,}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
