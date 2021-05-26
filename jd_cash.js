@@ -31,8 +31,7 @@ let helpAuthor = true;
 const randomCount =0;
 let cash_exchange = true;//是否消耗2元红包兑换200京豆，默认否
 const inviteCodes = [
-  `Ih40Ze27ZfknnjM@eU9YH7vRGKNFkiekqSFy@eU9YaurjN_Qh826DzHNF0g@eU9YaO7mMvh39G_SnXpH3w@eU9YPbrNH451jRWxlTpX@eU9YJovKDqdXsQ-_qSxt`,
-  `Ih40Ze27ZfknnjM@eU9YH7vRGKNFkiekqSFy@eU9YaurjN_Qh826DzHNF0g@eU9YaO7mMvh39G_SnXpH3w@eU9YPbrNH451jRWxlTpX@eU9YJovKDqdXsQ-_qSxt`,
+  `Ih40Ze27ZfknnjM@eU9YH7vRGKNFkiekqSFy`,
 ]
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -145,6 +144,10 @@ function index(info=false) {
               $.shareDate = data.data.result.shareDate;
               // $.log(`shareDate: ${$.shareDate}`)
               // console.log(helpInfo)
+              if( data.data.result && data.data.result.taskInfos){
+                console.log('任务', data.data.result)
+              }
+              
               for(let task of data.data.result.taskInfos){
                 if (task.type === 4) {
                   for (let i = task.doTimes; i < task.times; ++i) {
