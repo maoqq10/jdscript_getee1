@@ -144,12 +144,12 @@ function index(info=false) {
               $.shareDate = data.data.result.shareDate;
               // $.log(`shareDate: ${$.shareDate}`)
               // console.log(helpInfo)
-              if( data.data.result && data.data.result.taskInfos){
-                console.log('任务', data.data.result.taskInfos)
-                if(data.data.result.taskInfos && data.data.result.taskInfos.length > 0){
-                  console.log('任务JUMP', data.data.result.taskInfos[0].jump)
-                }
-              }
+              // if( data.data.result && data.data.result.taskInfos){
+              //   console.log('任务', data.data.result.taskInfos)
+              //   if(data.data.result.taskInfos && data.data.result.taskInfos.length > 0){
+              //     console.log('任务JUMP', data.data.result.taskInfos[0].jump)
+              //   }
+              // }
               
               for(let task of data.data.result.taskInfos){
                 if (task.type === 4) {
