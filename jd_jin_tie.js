@@ -428,7 +428,7 @@ function getFp() {
   // let fp = crypto.createHash("md5").update($.UserName + '573.9', "utf8").digest("hex").substr(4, 16)
   return ""
 }
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async resolve => {
     const options = {
       url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",

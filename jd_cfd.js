@@ -36,7 +36,7 @@ var _0xod9='jsjiami.com.v6',_0x5e79=[_0xod9,'5pqo6YGq5YqN5YiYEeaKmeW2rsOz57mj5py
 
 
 
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async resolve => {
     const options = {
       url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",

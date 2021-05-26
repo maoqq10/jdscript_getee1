@@ -58,7 +58,7 @@ if ($.isNode()) {
       $.nickName = '';
       $.beans = 0
       message = '';
-      // TotalBean();
+      //await TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
@@ -227,7 +227,7 @@ function taskPostUrl(function_id, body) {
   }
 }
 
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

@@ -128,7 +128,7 @@ function taskUrl(function_id, body = {}) {
 }
 
 
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

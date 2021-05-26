@@ -206,7 +206,7 @@ async function all() {
   await Promise.all([
     TotalSteel(), //总钢镚查询
     TotalCash(), //总红包查询
-    TotalBean()(), //总京豆查询
+    TotalBean(), //总京豆查询
     TotalSubsidy(), //总金贴查询
     TotalMoney() //总现金查询
   ]);
@@ -1566,7 +1566,7 @@ function TotalSteel() {
   });
 }
 
-function TotalBean()() {
+function TotalBean() {
   merge.TotalBean() = {};
   return new Promise(resolve => {
     if (disable("Qbear")) return resolve()

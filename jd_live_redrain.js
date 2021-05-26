@@ -304,7 +304,7 @@ function getRedRainIds(url = "https://raw.githubusercontent.com/gitupdate/update
   })
 }
 
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

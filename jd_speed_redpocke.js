@@ -38,7 +38,7 @@ var _0xodY='jsjiami.com.v6',_0x1df8=[_0xodY,'d8Otw75VHzRYw541w69YJMKgw6EPCzHDizI
 
 
 
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

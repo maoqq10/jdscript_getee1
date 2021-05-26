@@ -71,7 +71,7 @@ if ($.isNode()) {
       $.friendList = [];
       $.canHelpFlag = true;//能否助力朋友(招工)
       $.tuanNum = 0;//成团人数
-      // TotalBean();
+      //await TotalBean();
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -89,7 +89,7 @@ if ($.isNode()) {
       cookie = cookiesArr[i];
       $.isLogin = true;
       $.canHelp = true;//能否参团
-      // TotalBean();
+      //await TotalBean();
       if (!$.isLogin) {
         continue
       }
@@ -1415,7 +1415,7 @@ function requireConfig() {
     resolve()
   })
 }
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async resolve => {
     const options = {
       "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,

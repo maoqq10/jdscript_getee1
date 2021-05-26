@@ -81,7 +81,7 @@ const JD_API_HOST = "https://urvsaggpt.m.jd.com/guardianstar";
       $.isLogin = true;
       $.nickName = "";
       $.shareID = [];
-      // TotalBean();
+      //await TotalBean();
       console.log(
           `\n===============开始【京东账号${$.index}】${
               $.nickName || $.UserName
@@ -384,7 +384,7 @@ function doSupport(shareId) {
     });
   });
 }
-function TotalBean()() {
+function TotalBean() {
   return new Promise(async (resolve) => {
     const options = {
       url: `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
