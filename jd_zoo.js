@@ -24,13 +24,6 @@ let shareCodeList = [
   'sSKNX-MpqKOJsNu-n8qIDMqCaLKevXWlbLORaiTQSgm_XL8wzQcKpFw4TpXncrM',
   'sSKNX-MpqKOJsNu8m8-NAMOaNV4dUKa41HRZrFVSHYdWSaNQ9vg4qCRqxj3KYUY',
   'sSKNX-MpqKOJsNvpz-Sgdsu-crsz43VR1TZq48s7eF8sXoX46kh0-CdR-9C_',
-  'sSKNX-MpqKOJsNvy_uOxX0-m63fR3BhQqWnEmOgIQINHZivGRY-QfoIJFY_S',
-  'sSKNX-MpqKPS4bexmJLaAQWN_fBCYDWyiQLJ4YBOncKowQELmg',
-  '',
-  'sSKNX-MpqKOHseXmysOMWuijJCZ8KUghEqn65zm5NHr3Hn9y3Q',
-  'sSKNX-MpqKPS7Ly-kZ3QDcp8tRl7CbtpdwCK-wPMP8aYLAKT_EMcVqI',
-  'sSKNX-MpqKOJsNvxyP6qUTJih2aPZk6xto3HTk-BZK4Tv-jAZJA4P1bWCagh',
-  'sSKNX-MpqKMFXxhuIDPcBpRKpDei9f7eqB1hY5gzOkvv',
 ];
 //个人码
 let inviteIdList = [
@@ -41,6 +34,7 @@ let inviteIdList = [
 'ZXTKT012aEbflqex8FbXFjRWn6-7zx55awQ',
 
 ];
+let doPkSkill = true;  //自动放技能，不需要的改为false
 const JD_API_HOST = `https://api.m.jd.com/client.action?functionId=`;
 !(async () => {
   await requireConfig()
@@ -128,7 +122,7 @@ function zoo_getTaskDetail(shopSign = "",appSign = "",timeout = 0){
       //}
       $.post(url, async (err, resp, data) => {
         try {
-          // console.log('zoo_getTaskDetail:' + data)
+          //console.log('zoo_getTaskDetail:' + data)
           data = JSON.parse(data);
           if (shopSign === "") {
             shopSign = '""'
@@ -885,6 +879,10 @@ function zoo_pk_getHomeData(body = "",timeout = 0) {
         try {
           if (body !== "") {
             // await $.getScript("https://raw.githubusercontent.com/yangtingxiao/QuantumultX/master/memo/jd_nianBeastShareCode.txt").then((text) => (shareCodeList = text.split('\n')))
+            const readShareCodeRes = await readShareCode();
+            if (readShareCodeRes && readShareCodeRes.code === 1) {
+              shareCodeList = [...new Set([...shareCodeList, ...(readShareCodeRes.data || [])])];
+            }
             for (let i in shareCodeList) {
               if (shareCodeList[i]) await zoo_pk_assistGroup(shareCodeList[i]);
             }
@@ -896,7 +894,17 @@ function zoo_pk_getHomeData(body = "",timeout = 0) {
               console.log('您的队伍助力码：' + data.data.result.groupInfo.groupAssistInviteId);
               showCode = false;
             }
-            if (data.data.result.groupPkInfo.aheadFinish) return ;
+            //if (data.data.result.groupPkInfo.aheadFinish) return ;
+            if (!doPkSkill) return ;
+            if (typeof data.data.result.groupPkInfo.dayTotalValue !== "undefined") {
+              if (data.data.result.groupPkInfo.dayTotalValue >= data.data.result.groupPkInfo.dayTargetSell) return;
+            }
+            else
+            if (typeof data.data.result.groupPkInfo.nightTotalValue !== "undefined") {
+              if (data.data.result.groupPkInfo.nightTotalValue >= data.data.result.groupPkInfo.nightTargetSell) return;
+            }
+            else
+              return;
             for (let i in data.data.result.groupInfo.skillList) {
               if (data.data.result.groupInfo.skillList[i].num > 0) {
                 await zoo_pk_doPkSkill(data.data.result.groupInfo.skillList[i].code);
@@ -912,6 +920,30 @@ function zoo_pk_getHomeData(body = "",timeout = 0) {
         }
       })
     },timeout)
+  })
+}
+
+function readShareCode() {
+  return new Promise(async resolve => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/fruit/limit/0`, timeout: 10000,}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(10000);
+    resolve()
   })
 }
 
@@ -1080,6 +1112,7 @@ function initial() {
     merge[i].notify = "";
     merge[i].show = true;
   }
+  showCode = true;
 }
 //通知
 function msgShow() {
