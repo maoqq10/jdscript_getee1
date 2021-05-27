@@ -20,10 +20,11 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '',secretp = '', showCode = true;
 //商圈码
 let shareCodeList = [
-  'sSKNX-MpqKOJsNvLzvinW-AR1lSZoFUrwll93fDw0Wzo-R01de8-SgnH0j15',
-  'sSKNX-MpqKOJsNu-n8qIDMqCaLKevXWlbLORaiTQSgm_XL8wzQcKpFw4TpXncrM',
-  'sSKNX-MpqKOJsNu8m8-NAMOaNV4dUKa41HRZrFVSHYdWSaNQ9vg4qCRqxj3KYUY',
-  'sSKNX-MpqKOJsNvpz-Sgdsu-crsz43VR1TZq48s7eF8sXoX46kh0-CdR-9C_',
+  // 'sSKNX-MpqKOJsNvLzvinW-AR1lSZoFUrwll93fDw0Wzo-R01de8-SgnH0j15',
+  // 'sSKNX-MpqKOJsNu-n8qIDMqCaLKevXWlbLORaiTQSgm_XL8wzQcKpFw4TpXncrM',
+  // 'sSKNX-MpqKOJsNu8m8-NAMOaNV4dUKa41HRZrFVSHYdWSaNQ9vg4qCRqxj3KYUY',
+  // 'sSKNX-MpqKOJsNvpz-Sgdsu-crsz43VR1TZq48s7eF8sXoX46kh0-CdR-9C_',
+  'sSKNX-MpqKOJsNvpz-Sgdsu-crsz43VR1TZq48s7eF8sXoX46kh0-CdR-9C9'
 ];
 //个人码
 let inviteIdList = [
