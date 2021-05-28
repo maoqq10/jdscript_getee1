@@ -58,6 +58,8 @@ const JD_API_HOST = `https://api.m.jd.com/client.action?functionId=`;
       }
       console.log('\n\n京东账号：'+merge.nickname + ' 任务开始')
       await zoo_sign();
+      console.log('加密算法解密中。暂无法使用')
+      return ;
       await zoo_pk_getHomeData();
       await zoo_getHomeData();
       //await qryCompositeMaterials()
