@@ -57,6 +57,7 @@ const JD_API_HOST = `https://api.m.jd.com/client.action?functionId=`;
         continue;
       }
       console.log('\n\n京东账号：'+merge.nickname + ' 任务开始')
+      await zoo_sign();
       await zoo_pk_getHomeData();
       await zoo_getHomeData();
       //await qryCompositeMaterials()
@@ -272,6 +273,40 @@ function zoo_pk_doPkSkill(skillType, timeout = 0){
     },timeout)
   })
 }
+
+//签到
+function zoo_sign(timeout = 0){
+  return new Promise((resolve) => {
+    setTimeout( ()=>{
+      let url = {
+        url : `${JD_API_HOST}zoo_sign`,
+        headers : {
+          'Origin' : `https://wbbny.m.jd.com`,
+          'Cookie' : cookie,
+          'Connection' : `keep-alive`,
+          'Accept' : `application/json, text/plain, */*`,
+          'Host' : `api.m.jd.com`,
+          'User-Agent' : `jdapp;iPhone;9.2.0;14.1;`,
+          'Accept-Encoding' : `gzip, deflate, br`,
+          'Accept-Language' : `zh-cn`
+        },
+        body : `functionId=zoo_sign&body={}&client=wh5&clientVersion=1.0.0`
+      }
+      $.post(url, async (err, resp, data) => {
+        try {
+          //console.log(data)
+          data = JSON.parse(data);
+          console.log('签到结果：' + data.data.bizMsg);
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve()
+        }
+      })
+    },timeout)
+  })
+}
+
 
 //逛商城
 function zoo_shopSignInWrite(shopSign,timeout = 0){
@@ -898,11 +933,11 @@ function zoo_pk_getHomeData(body = "",timeout = 0) {
             //if (data.data.result.groupPkInfo.aheadFinish) return ;
             if (!doPkSkill) return ;
             if (typeof data.data.result.groupPkInfo.dayTotalValue !== "undefined") {
-              if (data.data.result.groupPkInfo.dayTotalValue >= data.data.result.groupPkInfo.dayTargetSell) return;
+              if (parseInt(data.data.result.groupPkInfo.dayTotalValue) >= parseInt(data.data.result.groupPkInfo.dayTargetSell)) return;
             }
             else
             if (typeof data.data.result.groupPkInfo.nightTotalValue !== "undefined") {
-              if (data.data.result.groupPkInfo.nightTotalValue >= data.data.result.groupPkInfo.nightTargetSell) return;
+              if (parseInt(data.data.result.groupPkInfo.nightTotalValue) >= parseInt(data.data.result.groupPkInfo.nightTargetSell)) return;
             }
             else
               return;
