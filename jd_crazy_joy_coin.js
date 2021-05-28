@@ -476,8 +476,8 @@ function getUserBean() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            if (data.success && data.data && data.data.TotalBean()s)
-              $.bean = data.data.TotalBean()s
+            if (data.success && data.data && data.data.totalBeans)
+              $.bean = data.data.totalBeans
             else
               console.log(`京豆信息获取信息失败`)
           }

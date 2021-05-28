@@ -75,7 +75,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
       $.index = i + 1;
       $.freeTimes = 0;
       $.prizeBeanCount = 0;
-      $.TotalBean()Count = 0;
+      $.totalBeanCount = 0;
       $.superShakeBeanNum = 0;
       $.moFangBeanNum = 0;
       $.isLogin = true;
@@ -227,7 +227,7 @@ async function shaking() {
       if (shakeBeanRes.data && shakeBeanRes.data.prizeBean) {
         console.log(`恭喜你，中奖了，获得${shakeBeanRes.data.prizeBean.count}京豆\n`)
         $.prizeBeanCount += shakeBeanRes.data.prizeBean.count;
-        $.TotalBean()Count = shakeBeanRes.data.luckyBox.TotalBean()Count;
+        $.totalBeanCount = shakeBeanRes.data.luckyBox.totalBeanCount;
       } else if (shakeBeanRes.data && shakeBeanRes.data.prizeCoupon) {
         console.log(`获得优惠券：${shakeBeanRes.data.prizeCoupon['limitStr']}\n`)
       } else {
