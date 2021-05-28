@@ -1300,30 +1300,7 @@ function addShareCode($pt_pin, $code) {
     resolve()
   })
 }
-function addShareCode($pt_pin, $code) {
-  //console.log(`addShareCode`,$pt_pin, $code)
-  return new Promise(async resolve => {
-    $.get({url: `https://admin.0xaa.cn/api/share_code/add?type=fruit&code=${$code}&pt_pin=${$pt_pin}`, 'timeout': 20000}, (err, resp, data) => {
-        //console.log('addShareCode result:', err, data);
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(20000);
-    resolve()
-  })
-}
+
 function readShareCode() {
   return new Promise(async resolve => {
     $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/fruit/limit/0`, timeout: 10000,}, (err, resp, data) => {
