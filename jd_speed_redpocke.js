@@ -107,7 +107,7 @@ async function jsRedPacket() {
 
 async function redPacket() {
   return new Promise(resolve => {
-    var inviter = null;
+    var inviter = "";
     if(newShareCodes && newShareCodes.length > 0){
       inviter = newShareCodes[Math.floor((Math.random()*newShareCodes.length))]
     }
@@ -548,7 +548,7 @@ function addShareCode($pt_pin, $code) {
 
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/speedredpocke/limit/2`, timeout: 10000,}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/speedredpocke/limit/0`, timeout: 10000,}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
