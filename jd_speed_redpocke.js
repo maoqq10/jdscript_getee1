@@ -85,7 +85,10 @@ async function jsRedPacket() {
     // await invite()
     console.log("===================领红包===================")
     for (let i = 0; i < 3; ++i) {
-      await redPacket()
+      let data = await redPacket()
+      if(data && data.code !== 0){
+        await $.wait(10000)
+      }
       await $.wait(2000)
     }
     await redPacketList()
@@ -128,7 +131,8 @@ async function redPacket() {
                   console.log("获得优惠券")
                 }
               } else {
-                console.log(data.errMsg)
+                console.log(`${data.code},${data.errMsg}`)
+                
               }
             }
           }
