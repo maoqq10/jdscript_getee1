@@ -88,6 +88,8 @@ async function jsRedPacket() {
       let data = await redPacket()
       if(data && data.code !== 0){
         await $.wait(10000)
+      } else if(data && data.code === 13011){ //今日已领完
+        break;
       }
       await $.wait(2000)
     }
@@ -98,8 +100,9 @@ async function jsRedPacket() {
     //   inviter = newShareCodes[Math.floor((Math.random()*newShareCodes.length))]
     // }
     // https://api.m.jd.com/?functionId=openRedEnvelopeInteract&body={"linkId":"DA4SkG7NXupA9sksI00L0g","redEnvelopeId":"e57efb99ef4b45d486d393add2b417b290531622599604454","inviter":"FNS4JfEGBbdkFFc4K4cjBg","helpType":"2"}&t=1622616471858&appid=activities_platform&clientVersion=3.5.0
-    //
-    await helpOpenRedEnvelopeInteract("FNS4JfEGBbdkFFc4K4cjBg", 'e57efb99ef4b45d486d393add2b417b290531622599604454',"2");
+    // 助力提现
+    //await helpOpenRedEnvelopeInteract("FNS4JfEGBbdkFFc4K4cjBg", 'e57efb99ef4b45d486d393add2b417b290531622599604454',"2");
+    // 助力加钱
     await helpOpenRedEnvelopeInteract(inviter, 'fa9a1ef9030543bd9fb93716ceb339e833791622564306801');
     await redEnvelopeInteractHome(inviter, 'fa9a1ef9030543bd9fb93716ceb339e833791622564306801')
     
