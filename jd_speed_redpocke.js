@@ -116,11 +116,7 @@ async function jsRedPacket() {
     for (let i = 0; i < 3; ++i) {
       let data = await redPacket();
       if (data && data.code !== 0) {
-        if (data.code === 13011) {
-          //今日已领完
-          break;
-        }
-        await $.wait(10000);
+        break;
       }
       await $.wait(2000);
     }
