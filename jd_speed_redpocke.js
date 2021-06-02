@@ -85,7 +85,10 @@ async function jsRedPacket() {
     // await invite()
     console.log("===================领红包===================")
     for (let i = 0; i < 3; ++i) {
-      await redPacket()
+      let data = await redPacket()
+      if(data && data.code !== 0){
+        await $.wait(10000)
+      }
       await $.wait(2000)
     }
     await redPacketList()
@@ -121,7 +124,7 @@ async function jsRedPacket() {
 
 async function redPacket() {
   return new Promise(resolve => {
-    var inviter = null;
+    var inviter = "";
     if(newShareCodes && newShareCodes.length > 0){
       inviter = newShareCodes[Math.floor((Math.random()*newShareCodes.length))]
     }
@@ -142,7 +145,8 @@ async function redPacket() {
                   console.log("获得优惠券")
                 }
               } else {
-                console.log(data.errMsg)
+                console.log(`${data.code},${data.errMsg}`)
+                
               }
             }
           }
@@ -643,7 +647,7 @@ function addShareCode($pt_pin, $code) {
 
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/speedredpocke/limit/2`, timeout: 10000,}, (err, resp, data) => {
+    $.get({url: `https://admin.0xaa.cn/api/share_code/query/type/speedredpocke/limit/0`, timeout: 10000,}, (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
