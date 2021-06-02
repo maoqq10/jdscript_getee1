@@ -488,6 +488,9 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
                   );
                 } else if (data.data && data.data.helpResult) {
                   console.log(`助力省钱大赢家失败;`, data.data.helpResult.code, data.data.helpResult.errMsg);
+                  if(data.data.helpResult.code==16005){
+                    shareCodeApi.finishShareCode(shareCode)
+                  }
                 } else {
                   console.log(`助力省钱大赢家失败;`, data.data);
                 }
