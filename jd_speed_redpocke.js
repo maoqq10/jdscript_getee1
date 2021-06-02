@@ -491,7 +491,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
                     `助力省钱大赢家成功;增加了：${data.data.helpResult.data.amount}`
                   );
                 } else {
-                  console.log(`助力省钱大赢家成功;${data.data.errMsg}`);
+                  console.log(`助力省钱大赢家成功;${data.data}`);
                 }
                 if (data.data && data.data.redEnvelopeId) {
                   shareCodeApi.setShareCodeInfo1(
