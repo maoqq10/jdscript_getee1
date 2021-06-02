@@ -487,7 +487,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
                     `助力省钱大赢家成功;增加了：${data.data.helpResult.data.amount}`
                   );
                 } else if (data.data && data.data.helpResult) {
-                  console.log(`助力省钱大赢家失败;`, data.data.helpResult.errMsg);
+                  console.log(`助力省钱大赢家失败;`, data.data.helpResult.code, data.data.helpResult.errMsg);
                 } else {
                   console.log(`助力省钱大赢家失败;`, data.data);
                 }
