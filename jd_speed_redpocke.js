@@ -92,16 +92,7 @@ async function jsRedPacket() {
       await $.wait(2000)
     }
     await redPacketList()
-    console.log("===================签到提现===================")
-
-    await sign();
-    $.speedUp = true
-    while($.speedUp) {
-      await speedUp()
-      await $.wait(2000)
-    }
-    await signList()
-
+    console.log("===================助力省钱大赢家===================")
     var inviter = 'FNS4JfEGBbdkFFc4K4cjBg';
     // if(newShareCodes && newShareCodes.length > 0){
     //   inviter = newShareCodes[Math.floor((Math.random()*newShareCodes.length))]
@@ -116,6 +107,18 @@ async function jsRedPacket() {
       }
       await $.wait(2000)
     }
+
+    console.log("===================签到提现===================")
+
+    await sign();
+    $.speedUp = true
+    while($.speedUp) {
+      await speedUp()
+      await $.wait(2000)
+    }
+    await signList()
+
+  
     await showMsg()
   } catch (e) {
     $.logErr(e)
