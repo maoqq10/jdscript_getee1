@@ -99,6 +99,20 @@ async function jsRedPacket() {
     }
     await signList()
 
+    var inviter = 'FNS4JfEGBbdkFFc4K4cjBg';
+    // if(newShareCodes && newShareCodes.length > 0){
+    //   inviter = newShareCodes[Math.floor((Math.random()*newShareCodes.length))]
+    // }
+    await helpOpenRedEnvelopeInteract(inviter, 'e57efb99ef4b45d486d393add2b417b290531622599604454');
+    await redEnvelopeInteractHome(inviter, 'e57efb99ef4b45d486d393add2b417b290531622599604454')
+    
+    for (let i = 0; i < 4; ++i) {
+      var result = await gambleChangeReward();
+      if(!(result && result.data && result.data.rewardState === 1)){
+        break;
+      }
+      await $.wait(2000)
+    }
     await showMsg()
   } catch (e) {
     $.logErr(e)
@@ -363,6 +377,87 @@ function cashOut(body) {
         $.logErr(e, resp)
       } finally {
         resolve();
+      }
+    })
+  })
+}
+// 助力省钱大赢家助力
+function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId){
+  return new Promise(resolve => {
+    $.get(taskGetUrl("openRedEnvelopeInteract",{"linkId":"DA4SkG7NXupA9sksI00L0g","redEnvelopeId":redEnvelopeId,"inviter":shareCode,"helpType":"1"}), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.code === 0) {
+              console.log(`助力省钱大赢家成功;${data.data.amount}`)
+            } else {
+              console.log(data.errMsg)
+              console.log(`助力省钱大赢家失败，${data.code}，${data.errMsg}`)
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+
+function redEnvelopeInteractHome(shareCode, redEnvelopeId){
+  return new Promise(resolve => {
+    $.get(taskGetUrl("redEnvelopeInteractHome",{"linkId":"DA4SkG7NXupA9sksI00L0g","redEnvelopeId":redEnvelopeId,"inviter":shareCode,"helpType":"1"}), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.code === 0) {
+              console.log(`助力省钱大赢家redEnvelopeInteractHome成功;${data.data.amount}`)
+            } else {
+              console.log(data.errMsg)
+              console.log(`助力省钱大赢家redEnvelopeInteractHome失败，${data.code}，${data.errMsg}`)
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+
+function gambleChangeReward(){
+  return new Promise(async resolve => {
+    $.post(taskPostUrl("gambleChangeReward",{"linkId":"YhCkrVusBVa_O2K-7xE6hA"}), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            console.log(`翻翻乐结果：${data}`)
+            data = JSON.parse(data);
+            if (data.code === 0) {
+              console.log(`翻翻乐成功！`)
+            } else {
+              console.log(`翻翻乐异常：${data.code},${data.errMsg}`);
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
       }
     })
   })
