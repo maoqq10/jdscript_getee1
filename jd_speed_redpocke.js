@@ -121,7 +121,7 @@ async function jsRedPacket() {
           break;
         }
         await $.wait(10000);
-      } 
+      }
       await $.wait(2000);
     }
     await redPacketList();
@@ -130,11 +130,11 @@ async function jsRedPacket() {
     var redEnvelopeId = "";
     if (newShareCodes && newShareCodes.length > 0) {
       // inviter = newShareCodes[Math.floor((Math.random()*newShareCodes.length))]
-      for(var i = 0; i < newShareCodes.length; i++){
-        redEnvelopeId = await shareCodeApi.getShareCodeInfo1(newShareCodes[i])
-        if(redEnvelopeId){
-         console.log("getShareCodeInfo1 redEnvelopeId=", redEnvelopeId);
-         await helpOpenRedEnvelopeInteract(newShareCodes[i], redEnvelopeId);
+      for (var i = 0; i < newShareCodes.length; i++) {
+        redEnvelopeId = await shareCodeApi.getShareCodeInfo1(newShareCodes[i]);
+        if (redEnvelopeId) {
+          console.log("getShareCodeInfo1 redEnvelopeId=", redEnvelopeId);
+          await helpOpenRedEnvelopeInteract(newShareCodes[i], redEnvelopeId);
         }
       }
     }
@@ -490,8 +490,10 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
                   console.log(
                     `助力省钱大赢家成功;增加了：${data.data.helpResult.data.amount}`
                   );
+                } else if (data.data && data.data.helpResult) {
+                  console.log(`助力省钱大赢家失败;`, data.data.helpResult.errMsg);
                 } else {
-                  console.log(`助力省钱大赢家成功;`, data.data);
+                  console.log(`助力省钱大赢家失败;`, data.data);
                 }
                 if (data.data && data.data.redEnvelopeId) {
                   shareCodeApi.setShareCodeInfo1(
