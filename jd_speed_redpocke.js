@@ -93,12 +93,15 @@ async function jsRedPacket() {
     }
     await redPacketList()
     console.log("===================助力省钱大赢家===================")
-    var inviter = 'FNS4JfEGBbdkFFc4K4cjBg';
+    var inviter = 'LGK6my6uvx349vm2hmBre9uvw2S27bolw13OWu3Sgrg';
     // if(newShareCodes && newShareCodes.length > 0){
     //   inviter = newShareCodes[Math.floor((Math.random()*newShareCodes.length))]
     // }
-    await helpOpenRedEnvelopeInteract(inviter, 'e57efb99ef4b45d486d393add2b417b290531622599604454');
-    await redEnvelopeInteractHome(inviter, 'e57efb99ef4b45d486d393add2b417b290531622599604454')
+    // https://api.m.jd.com/?functionId=openRedEnvelopeInteract&body={"linkId":"DA4SkG7NXupA9sksI00L0g","redEnvelopeId":"e57efb99ef4b45d486d393add2b417b290531622599604454","inviter":"FNS4JfEGBbdkFFc4K4cjBg","helpType":"2"}&t=1622616471858&appid=activities_platform&clientVersion=3.5.0
+    //
+    await helpOpenRedEnvelopeInteract("FNS4JfEGBbdkFFc4K4cjBg", 'e57efb99ef4b45d486d393add2b417b290531622599604454',"2");
+    await helpOpenRedEnvelopeInteract(inviter, 'fa9a1ef9030543bd9fb93716ceb339e833791622564306801');
+    await redEnvelopeInteractHome(inviter, 'fa9a1ef9030543bd9fb93716ceb339e833791622564306801')
     
     for (let i = 0; i < 4; ++i) {
       var result = await gambleChangeReward();
@@ -388,10 +391,10 @@ function cashOut(body) {
     })
   })
 }
-// 助力省钱大赢家助力
-function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId){
+// 助力省钱大赢家助力, helpType 1助力加钱，2助力提现
+function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType="1"){
   return new Promise(resolve => {
-    $.get(taskGetUrl("openRedEnvelopeInteract",{"linkId":"DA4SkG7NXupA9sksI00L0g","redEnvelopeId":redEnvelopeId,"inviter":shareCode,"helpType":"1"}), async (err, resp, data) => {
+    $.get(taskGetUrl("openRedEnvelopeInteract",{"linkId":"DA4SkG7NXupA9sksI00L0g","redEnvelopeId":redEnvelopeId,"inviter":shareCode,"helpType":helpType}), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
