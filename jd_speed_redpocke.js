@@ -96,6 +96,11 @@ if ($.isNode()) {
         }
         continue;
       }
+      if(process.argv && process.argv.length > 3){
+        console.log('process.argv', process.argv[2])
+        await helpOpenRedEnvelopeInteract(process.argv[2], process.argv[3],"2");
+        continue;
+      }
       await springRewardQuery();
       await shareCodesFormat();
       await jsRedPacket();
@@ -772,6 +777,43 @@ function apCashWithDraw(id, poolBaseId, prizeGroupId, prizeBaseId) {
     );
   });
 }
+
+// function exchange() {
+//   return new Promise((resolve) => {
+//     var result = {}
+//     $.get(
+//       taskGetUrl("gambleHomePage", {"linkId":"YhCkrVusBVa_O2K-7xE6hA"}),
+//       async (err, resp, data) => {
+//         try {
+//           if (err) {
+//             console.log(`${JSON.stringify(err)}`);
+//             console.log(`${$.name} API请求失败，请检查网路重试`);
+//           } else {
+//             if (safeGet(data)) {
+//               data = JSON.parse(data);
+//               result = data
+//               console.log('翻翻乐首页数据', data)
+//               if (data.code === 0) {
+//                 console.log(
+//                   `助力省钱大赢家redEnvelopeInteractHome成功;${data.data.amount}`
+//                 );
+//               } else {
+//                 console.log(data.errMsg);
+//                 console.log(
+//                   `助力省钱大赢家redEnvelopeInteractHome失败，${data.code}，${data.errMsg}`
+//                 );
+//               }
+//             }
+//           }
+//         } catch (e) {
+//           $.logErr(e, resp);
+//         } finally {
+//           resolve(result);
+//         }
+//       }
+//     );
+//   });
+// }
 
 function showMsg() {
   return new Promise((resolve) => {
