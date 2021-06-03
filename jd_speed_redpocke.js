@@ -463,7 +463,7 @@ async function fanfanle(){
       if(!(result && result.data && result.data.rewardState === 1)){
         break;
       }
-      if(result && result.data && parseFloat(result.data.rewardValue) >= 0.3){
+      if(result && result.data && parseFloat(result.data.rewardValue) >= 0.3 && result.data.changeTimes >= 2){
         var gambleObtainRewardResult = await gambleObtainReward()
         if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.code == 0){
           var data = gambleObtainRewardResult.data
@@ -480,7 +480,7 @@ async function fanfanle(){
     await change()
   } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1 && parseFloat(gambleHomePageResult.data.rewardValue) < 0.3){
     await change()
-  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1 &&  parseFloat(gambleHomePageResult.data.rewardValue) >= 0.3){
+  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1 &&  parseFloat(gambleHomePageResult.data.rewardValue) >= 0.3 && gambleHomePageResult.data.changeTimes >= 2){
     var gambleObtainRewardResult = await gambleObtainReward()
     if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.code == 0){
       var data = gambleObtainRewardResult.data
