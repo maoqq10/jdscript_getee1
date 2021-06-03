@@ -147,7 +147,7 @@ async function jsRedPacket() {
       redEnvelopeId = helpOpenRedEnvelopeInteractResult.redEnvelopeId
     }
    
-    await fanfanle()
+    //await fanfanle()
     console.log("===================签到提现===================");
 
     await sign();
