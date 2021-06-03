@@ -142,18 +142,12 @@ async function jsRedPacket() {
     //   inviter,
     //   redEnvelopeId
     // );
-    await redEnvelopeInteractHome(inviter, redEnvelopeId);
-    // if(helpOpenRedEnvelopeInteractResult && helpOpenRedEnvelopeInteractResult.data && helpOpenRedEnvelopeInteractResult.redEnvelopeId){
-    //   redEnvelopeId = helpOpenRedEnvelopeInteractResult.redEnvelopeId
-    // }
-    // for (let i = 0; i < 4; ++i) {
-    //   var result = await gambleChangeReward(redEnvelopeId);
-    //   if(!(result && result.data && result.data.rewardState === 1)){
-    //     break;
-    //   }
-    //   await $.wait(2000)
-    // }
-
+    let helpOpenRedEnvelopeInteractResult = await redEnvelopeInteractHome(inviter, redEnvelopeId);
+    if(helpOpenRedEnvelopeInteractResult && helpOpenRedEnvelopeInteractResult.data && helpOpenRedEnvelopeInteractResult.redEnvelopeId){
+      redEnvelopeId = helpOpenRedEnvelopeInteractResult.redEnvelopeId
+    }
+   
+    await fafale()
     console.log("===================签到提现===================");
 
     await sign();
@@ -459,9 +453,48 @@ function cashOut(body) {
     });
   });
 }
+
+// 翻翻乐
+async function fafale(){
+  var gambleHomePageResult = await gambleHomePage()
+  async function change(){
+    for (let i = 0; i < 5; ++i) {
+      var result = await gambleChangeReward();
+      if(!(result && result.data && result.data.rewardState === 1)){
+        break;
+      }
+      if(result && result.data && parseFloat(result.data.rewardValue) >= 0.3){
+        var gambleObtainRewardResult = await gambleObtainReward()
+        if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.data.code == 0){
+          var data = gambleObtainRewardResult.data.data
+          var apCashWithDrawResult = await apCashWithDraw(data.id, data.poolBaseId, data.prizeGroupId, data.prizeBaseId)
+          
+        }
+        break;
+      }
+      await $.wait(2000)
+    }
+  }
+  if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 0 && gambleHomePageResult.data.leftTime == 0){
+    await gambleOpenReward()
+    await change()
+  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1){
+    await change()
+  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 3){
+    var gambleObtainRewardResult = await gambleObtainReward()
+    if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.data.code == 0){
+      var data = gambleObtainRewardResult.data.data
+      var apCashWithDrawResult = await apCashWithDraw(data.id, data.poolBaseId, data.prizeGroupId, data.prizeBaseId)
+      
+    }
+  }
+  
+}
+
 // 助力省钱大赢家助力, helpType 1助力加钱，2助力提现
 function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
   return new Promise((resolve) => {
+    var result = {}
     $.get(
       taskGetUrl("openRedEnvelopeInteract", {
         linkId: "DA4SkG7NXupA9sksI00L0g",
@@ -477,6 +510,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
           } else {
             if (safeGet(data)) {
               data = JSON.parse(data);
+              result = data
               if (data.code === 0) {
                 if (
                   data.data &&
@@ -510,7 +544,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
         } catch (e) {
           $.logErr(e, resp);
         } finally {
-          resolve(data);
+          resolve(result);
         }
       }
     );
@@ -519,6 +553,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
 
 function redEnvelopeInteractHome(shareCode, redEnvelopeId) {
   return new Promise((resolve) => {
+    var result = {}
     $.get(
       taskGetUrl("redEnvelopeInteractHome", {
         linkId: "DA4SkG7NXupA9sksI00L0g",
@@ -534,6 +569,7 @@ function redEnvelopeInteractHome(shareCode, redEnvelopeId) {
           } else {
             if (safeGet(data)) {
               data = JSON.parse(data);
+              result = data
               if (data.code === 0) {
                 console.log(
                   `助力省钱大赢家redEnvelopeInteractHome成功;${data.data.amount}`
@@ -549,15 +585,101 @@ function redEnvelopeInteractHome(shareCode, redEnvelopeId) {
         } catch (e) {
           $.logErr(e, resp);
         } finally {
-          resolve(data);
+          resolve(result);
         }
       }
     );
   });
 }
 
+/*
+{
+    "success": true,
+    "code": 0,
+    "errMsg": "success",
+    "data": {
+        "id": null,
+        "rewardValue": null,
+        "rewardState": 0,
+        "rewardType": 0,
+        "leftTime": 0,
+        "changeTimes": null,
+        "successChangeTimes": null,
+        "scene": null
+    }
+}
+rewardState == 0 && leftTime == 0 时可翻
+*/
+function gambleHomePage() {
+  return new Promise((resolve) => {
+    var result = {}
+    $.get(
+      taskGetUrl("gambleHomePage", {"linkId":"YhCkrVusBVa_O2K-7xE6hA"}),
+      async (err, resp, data) => {
+        try {
+          if (err) {
+            console.log(`${JSON.stringify(err)}`);
+            console.log(`${$.name} API请求失败，请检查网路重试`);
+          } else {
+            if (safeGet(data)) {
+              data = JSON.parse(data);
+              result = data
+              console.log('翻翻乐首页数据', data)
+              if (data.code === 0) {
+                console.log(
+                  `助力省钱大赢家redEnvelopeInteractHome成功;${data.data.amount}`
+                );
+              } else {
+                console.log(data.errMsg);
+                console.log(
+                  `助力省钱大赢家redEnvelopeInteractHome失败，${data.code}，${data.errMsg}`
+                );
+              }
+            }
+          }
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve(result);
+        }
+      }
+    );
+  });
+}
+function gambleOpenReward() {
+  return new Promise(async (resolve) => {
+    var result = {}
+    $.post(
+      taskPostUrl("gambleOpenReward", { linkId: "YhCkrVusBVa_O2K-7xE6hA" }),
+      async (err, resp, data) => {
+        try {
+          if (err) {
+            console.log(`${JSON.stringify(err)}`);
+            console.log(`${$.name} API请求失败，请检查网路重试`);
+          } else {
+            if (safeGet(data)) {
+              console.log(`打开翻翻乐结果：${data}`);
+              data = JSON.parse(data);
+              result = data
+              if (data.code === 0) {
+                console.log(`打开翻翻乐成功！`);
+              } else {
+                console.log(`打开翻翻乐异常：${data.code},${data.errMsg}`);
+              }
+            }
+          }
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve(result);
+        }
+      }
+    );
+  });
+}
 function gambleChangeReward() {
   return new Promise(async (resolve) => {
+    var result = {}
     $.post(
       taskPostUrl("gambleChangeReward", { linkId: "YhCkrVusBVa_O2K-7xE6hA" }),
       async (err, resp, data) => {
@@ -569,6 +691,7 @@ function gambleChangeReward() {
             if (safeGet(data)) {
               console.log(`翻翻乐结果：${data}`);
               data = JSON.parse(data);
+              result = data
               if (data.code === 0) {
                 console.log(`翻翻乐成功！`);
               } else {
@@ -579,7 +702,71 @@ function gambleChangeReward() {
         } catch (e) {
           $.logErr(e, resp);
         } finally {
-          resolve(data);
+          resolve(result);
+        }
+      }
+    );
+  });
+}
+
+function gambleObtainReward() {
+  return new Promise(async (resolve) => {
+    var result = {}
+    $.post(
+      taskPostUrl("gambleObtainReward", {"linkId":"YhCkrVusBVa_O2K-7xE6hA","rewardType":2}),
+      async (err, resp, data) => {
+        try {
+          if (err) {
+            console.log(`${JSON.stringify(err)}`);
+            console.log(`${$.name} API请求失败，请检查网路重试`);
+          } else {
+            if (safeGet(data)) {
+              console.log(`翻翻乐准备提现结果：${data}`);
+              data = JSON.parse(data);
+              result = data
+              if (data.code === 0) {
+                console.log(`翻翻乐准备提现成功！`);
+              } else {
+                console.log(`翻翻乐准备提现异常：${data.code},${data.errMsg}`);
+              }
+            }
+          }
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve(result);
+        }
+      }
+    );
+  });
+}
+
+function apCashWithDraw(id, poolBaseId, prizeGroupId, prizeBaseId) {
+  return new Promise(async (resolve) => {
+    var result = {}
+    $.post(
+      taskPostUrl("apCashWithDraw", {"businessSource":"GAMBLE","base":{"id":id,"business":"redEnvelopeDouble","poolBaseId":poolBaseId,"prizeGroupId":prizeGroupId,"prizeBaseId":prizeBaseId,"prizeType":4},"linkId":"YhCkrVusBVa_O2K-7xE6hA"}),
+      async (err, resp, data) => {
+        try {
+          if (err) {
+            console.log(`${JSON.stringify(err)}`);
+            console.log(`${$.name} API请求失败，请检查网路重试`);
+          } else {
+            if (safeGet(data)) {
+              console.log(`翻翻乐提现结果：${data}`);
+              data = JSON.parse(data);
+              result = data
+              if (data.code === 0) {
+                console.log(`翻翻乐提现成功！`);
+              } else {
+                console.log(`翻翻乐提现异常：${data.code},${data.errMsg}`);
+              }
+            }
+          }
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve(result);
         }
       }
     );
