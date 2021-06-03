@@ -1,11 +1,11 @@
 const $ = new Env();
 
-function finishShareCode($code) {
+function finishShareCode($code, $pt_pin, $type) {
   //console.log(`addShareCode`,$pt_pin, $code)
   return new Promise(async (resolve) => {
     $.get(
       {
-        url: `https://admin.0xaa.cn/api/share_code/finish?code=${$code}`,
+        url: `https://admin.0xaa.cn/api/share_code/finish?type=${$type}&code=${$code}&pt_pin=${$pt_pin}`,
         timeout: 20000,
       },
       (err, resp, data) => {
