@@ -147,7 +147,7 @@ async function jsRedPacket() {
       redEnvelopeId = helpOpenRedEnvelopeInteractResult.redEnvelopeId
     }
    
-    await fafale()
+    await fanfanle()
     console.log("===================签到提现===================");
 
     await sign();
@@ -455,7 +455,7 @@ function cashOut(body) {
 }
 
 // 翻翻乐
-async function fafale(){
+async function fanfanle(){
   var gambleHomePageResult = await gambleHomePage()
   async function change(){
     for (let i = 0; i < 5; ++i) {
@@ -465,8 +465,8 @@ async function fafale(){
       }
       if(result && result.data && parseFloat(result.data.rewardValue) >= 0.3){
         var gambleObtainRewardResult = await gambleObtainReward()
-        if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.data.code == 0){
-          var data = gambleObtainRewardResult.data.data
+        if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.code == 0){
+          var data = gambleObtainRewardResult.data
           var apCashWithDrawResult = await apCashWithDraw(data.id, data.poolBaseId, data.prizeGroupId, data.prizeBaseId)
           
         }
@@ -480,10 +480,10 @@ async function fafale(){
     await change()
   } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1){
     await change()
-  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 3){
+  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 2){
     var gambleObtainRewardResult = await gambleObtainReward()
-    if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.data.code == 0){
-      var data = gambleObtainRewardResult.data.data
+    if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.code == 0){
+      var data = gambleObtainRewardResult.data
       var apCashWithDrawResult = await apCashWithDraw(data.id, data.poolBaseId, data.prizeGroupId, data.prizeBaseId)
       
     }
