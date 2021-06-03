@@ -36,9 +36,7 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let inviteCodes = ["RtGKu7vHP1XAHcrrdYZSmpwdPQd1FQoAxEWBNPOwPCyjGXJk", 'RtGKzur1EAKkfIPMENRl0pvRHkUsRE8otwTRgPGjkA10LRTRtw', 'RtGKzO7wFQ7ye4KdQd1n33T4YFE7RDtjKRl2lBJy4rApceKagg',
- 'RtGKmbrbOHjwAvj-SZ13mnrMG-yo9GJtiylzwD7Otgmi5IFT', 'RtGKgovcKVHSPuLwdYtNmpKyDKJbITTJ47ey8R3LsAK0D6gZ', 'HYDmwe2tQg-iEd7WW5gzmoKj0SSvqEHROmUQksLi5GQ',
-];
+let inviteCodes = [];
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
@@ -305,13 +303,7 @@ function shareCodesFormat() {
   return new Promise(async resolve => {
     // console.log(`第${$.index}个京东账号的助力码:::${$.shareCodesArr[$.index - 1]}`)
     $.newShareCodes = [];
-    if ($.shareCodesArr[$.index - 1]) {
-      $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-    } else {
-      console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
-      const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-      $.newShareCodes = inviteCodes[tempIndex].split('@');
-    }
+
     const readShareCodeRes = await readShareCode();
     if (readShareCodeRes && readShareCodeRes.code === 1) {
       $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
