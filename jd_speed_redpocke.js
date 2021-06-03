@@ -147,7 +147,7 @@ async function jsRedPacket() {
       redEnvelopeId = helpOpenRedEnvelopeInteractResult.redEnvelopeId
     }
    
-    //await fanfanle()
+    await fanfanle()
     console.log("===================签到提现===================");
 
     await sign();
@@ -478,9 +478,9 @@ async function fanfanle(){
   if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 0 && gambleHomePageResult.data.leftTime == 0){
     await gambleOpenReward()
     await change()
-  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1){
+  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1 && parseFloat(gambleHomePageResult.data.rewardValue) < 0.3){
     await change()
-  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 2){
+  } else if(gambleHomePageResult && gambleHomePageResult.data && gambleHomePageResult.data.rewardState == 1 &&  parseFloat(gambleHomePageResult.data.rewardValue) >= 0.3){
     var gambleObtainRewardResult = await gambleObtainReward()
     if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.code == 0){
       var data = gambleObtainRewardResult.data
