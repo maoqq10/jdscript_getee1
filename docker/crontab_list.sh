@@ -19,7 +19,7 @@
 #5 6,22 * * * node /scripts/jd_global.js >> /scripts/logs/jd_global.log 2>&1
 
 #城城分现金
-0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
+# 0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
 
 
 #每日抽奖 活动时间：2021-05-01至2021-05-31
