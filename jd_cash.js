@@ -31,7 +31,7 @@ let helpAuthor = true;
 const randomCount =0;
 let cash_exchange = true;//是否消耗2元红包兑换200京豆，默认否
 const inviteCodes = [
-  `Ih40Ze27ZfknnjM@eU9YH7vRGKNFkiekqSFy`,
+  `eU9YH7vRGKNFkiekqSFy`, 'Ih40Ze27ZfknnjM', 'eU9YPbrNH451jRWxlTpX', 'eU9YC4zDH65OiBeArwZH',
 ]
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -440,7 +440,9 @@ function shareCodesFormat() {
       // $.newShareCodes = [...(authorCode.map((item, index) => authorCode[index] = item['inviteCode'])), ...$.newShareCodes];
       console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-      $.newShareCodes = inviteCodes[tempIndex].split('@');
+      if(inviteCodes[tempIndex]){
+        $.newShareCodes = inviteCodes[tempIndex].split('@');
+      }
     }
     const readShareCodeRes = await readShareCode();
     if (readShareCodeRes && readShareCodeRes.code === 1) {
