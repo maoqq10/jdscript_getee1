@@ -607,7 +607,7 @@ function redEnvelopeInteractHome(shareCode, redEnvelopeId) {
           } else {
             if (safeGet(data)) {
               data = JSON.parse(data);
-              console.log('redEnvelopeInteractHome', data)
+              // console.log('redEnvelopeInteractHome', data)
               result = data
               if (data.code === 0) {
                 console.log(
@@ -663,16 +663,12 @@ function gambleHomePage() {
             if (safeGet(data)) {
               data = JSON.parse(data);
               result = data
-              console.log('翻翻乐首页数据', data)
+              // console.log('翻翻乐首页数据', data)
               if (data.code === 0) {
-                console.log(
-                  `助力省钱大赢家redEnvelopeInteractHome成功;${data.data.amount}`
-                );
+               
               } else {
                 console.log(data.errMsg);
-                console.log(
-                  `助力省钱大赢家redEnvelopeInteractHome失败，${data.code}，${data.errMsg}`
-                );
+                
               }
             }
           }
@@ -697,11 +693,16 @@ function gambleOpenReward() {
             console.log(`${$.name} API请求失败，请检查网路重试`);
           } else {
             if (safeGet(data)) {
-              console.log(`打开翻翻乐结果：${data}`);
+              
               data = JSON.parse(data);
+              if(data.data.rewardState == 1){
+                console.log(`✔翻了${data.data.changeTimes}次,得到${data.data.rewardValue}`);
+              } else if(data.data.rewardState == 3){
+                console.log(`💔失败清零`);
+              }
               result = data
               if (data.code === 0) {
-                console.log(`打开翻翻乐成功！`);
+                // console.log(`打开翻翻乐成功！`);
               } else {
                 console.log(`打开翻翻乐异常：${data.code},${data.errMsg}`);
               }
