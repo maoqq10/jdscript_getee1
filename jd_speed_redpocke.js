@@ -495,6 +495,9 @@ async function fanfanle(amountEnough, state, gambleActLeftTime){
         
       }
     }
+    
+  } else {
+    console.log('暂时还翻不了')
   }
 
   if(amountEnough){
@@ -729,13 +732,13 @@ function gambleChangeReward() {
             console.log(`${$.name} API请求失败，请检查网路重试`);
           } else {
             if (safeGet(data)) {
-              console.log(`翻翻乐结果：${data}`);
+              // console.log(`翻翻乐结果：${data}`);
               data = JSON.parse(data);
               result = data
-              if (data.code === 0) {
-                console.log(`翻翻乐成功！`);
-              } else {
-                console.log(`翻翻乐异常：${data.code},${data.errMsg}`);
+              if(data.data.rewardState == 1){
+                console.log(`✔翻了${data.data.changeTimes}次,得到${data.data.rewardValue}`);
+              } else if(data.data.rewardState == 3){
+                console.log(`💔失败清零`);
               }
             }
           }
