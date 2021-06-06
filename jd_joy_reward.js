@@ -111,7 +111,7 @@ async function joyReward() {
       rewardNum = joyRewardName;
     }
     for (let item of giftSaleInfos) {
-      if (item.giftType === 'jd_bean' && item['giftValue'] === rewardNum) {
+      if (item.giftType === 'jd_bean' && item.giftValue === rewardNum && item.leftStock > 0) {
         saleInfoId = item.id;
         leftStock = item.leftStock;
         salePrice = item.salePrice;
@@ -120,8 +120,8 @@ async function joyReward() {
     }
     if(!saleInfoId){
       for (let item of giftSaleInfos) {
-        if (item.giftType === 'jd_bean' && item['leftStock'] > 0) {
-          console.log(`更改兑换：从${rewardNum}改成${item.giftValue}`)
+        if (item.giftType === 'jd_bean' && item.leftStock > 0) {
+          console.log(`更改兑换值：从${rewardNum}改成${item.giftValue}`)
           saleInfoId = item.id;
           leftStock = item.leftStock;
           salePrice = item.salePrice;
