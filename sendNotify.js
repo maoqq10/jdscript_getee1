@@ -171,6 +171,9 @@ async function sendNotify(text, desp, params = {}, author = '', important = fals
 }
 
 function serverNotify(text, desp, timeout = 2100) {
+  if(test && (text.endsWith("cookie已失效 - empty") || text.endsWith("cookie已失效 - "))){
+    return
+  }
   return  new Promise(resolve => {
     if (SCKEY) {
       //微信server酱推送通知一个\n不会换行，需要两个\n才能换行，故做此替换
