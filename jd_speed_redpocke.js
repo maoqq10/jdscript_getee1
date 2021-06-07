@@ -470,7 +470,7 @@ async function fanfanle(amountEnough, state, gambleActLeftTime){
         if(!(result && result.data && result.data.rewardState === 1)){
           break;
         }
-        if(result && result.data && ((parseFloat(result.data.rewardValue) >= 0.3 && result.data.changeTimes >= 2 && $.UserName != '153919351_m') || result.data.changeTimes >= 5)){
+        if(result && result.data && parseFloat(result.data.rewardValue) >= 0.3 && result.data.changeTimes >= 2){
           var gambleObtainRewardResult = await gambleObtainReward()
           if(gambleObtainRewardResult && gambleObtainRewardResult.data && gambleObtainRewardResult.code == 0){
             var data = gambleObtainRewardResult.data
