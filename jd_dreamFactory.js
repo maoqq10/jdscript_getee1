@@ -35,7 +35,9 @@ let tuanActiveId = `mNGPTrOPluOSeZcupPI40w==`;
 const jxOpenUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://wqsd.jd.com/pingou/dream_factory/index.html%22%20%7D`;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 const inviteCodes = [
-
+"ffCQNql3SFJb8wWpZAUT_g==",
+"DmQs0q6wbjW7yjMldCu2Zw==",
+"HhsSGOcW80N2g5-PecBVsw==",
 ];
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.tuanIds = [];
@@ -1368,7 +1370,9 @@ function shareCodesFormat() {
     } else {
       console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
-      $.newShareCodes = inviteCodes[tempIndex].split('@');
+      if(inviteCodes[tempIndex]){
+        $.newShareCodes = inviteCodes[tempIndex].split('@');
+      }
     }
     const readShareCodeRes = await readShareCode();
     if (readShareCodeRes && readShareCodeRes.code === 1) {
