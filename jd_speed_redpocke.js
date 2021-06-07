@@ -462,7 +462,7 @@ function cashOut(body) {
 
 // 翻翻乐
 async function fanfanle(amountEnough, state, gambleActLeftTime){
-  if(!amountEnough && gambleActLeftTime == 0){
+  if(gambleActLeftTime == 0){
     var gambleHomePageResult = await gambleHomePage()
     async function change(){
       for (let i = 0; i < 5; ++i) {
