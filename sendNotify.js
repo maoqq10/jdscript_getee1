@@ -171,7 +171,7 @@ async function sendNotify(text, desp, params = {}, author = '', important = fals
 }
 
 function serverNotify(text, desp, timeout = 2100) {
-  if(test && (text.endsWith("cookie已失效 - empty") || text.endsWith("cookie已失效 - "))){
+  if(text && (text.endsWith("cookie已失效 - empty") || text.endsWith("cookie已失效 - "))){
     return
   }
   return  new Promise(resolve => {
