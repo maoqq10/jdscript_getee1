@@ -1,3 +1,5 @@
+const { rejects } = require("assert");
+
 /* 
 #自定义商品变量
 export shopid="1598"   ##你要商品ID 冰箱
@@ -143,7 +145,13 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
                 commodityItem.limitStartTime * 1000 - (Date.now() - delta) <
               200
             ) {
-              await addProduct(commodityItem.commodityId);
+                try {
+                    await addProduct(commodityItem.commodityId);
+                    console.log('抢到产品，退出程序')
+                } catch (err) {
+                    console.log('没抢到', err)
+                }
+              
             }
             if (
                 (Date.now() - delta) - commodityItem.limitStartTime * 1000 >
@@ -214,12 +222,12 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
   }
 
 function addProduct(commodityDimId) {
-  return new Promise(async (resolve) => {
+  return new Promise(async (resolve, reject) => {
     var factoryId = "22576660";
     var deviceId = "5241450082439161";
     var time = Date.now();
     let options = {
-      url: `https://m.jingxi.com//dreamfactory/userinfo/AddProduction?zone=dream_factory&factoryId=${factoryId}&deviceId=${deviceId}&commodityDimId=${commodityDimId}&replaceProductionId=&_time=${time}&_stk=_time%2CcommodityDimId%2CdeviceId%2CfactoryId%2CreplaceProductionId%2Czone&_ste=1&h5st=20210609170825400;5241450082439161;10001;tk01w996b1b3ba8nejFaa2N6eDFniEFlrApCu0vxS7A58l/x4k637Wi5wdIFRUQvTUpyq9IBy5OA0p5gAPHx0RZFoIF0;ed9c9f27141a3172bb4f497007fcd822fd9d625b5bd61837e1793cc6ea4d03c5&_=1623146403580&sceneval=2&g_login_type=1&callback=jsonpCBKQQQQ&g_ty=ls`,
+      url: `https://m.jingxi.com//dreamfactory/userinfo/AddProduction?zone=dream_factory&factoryId=${factoryId}&deviceId=${deviceId}&commodityDimId=${commodityDimId}&replaceProductionId=&_time=${time}&_stk=_time%2CcommodityDimId%2CdeviceId%2CfactoryId%2CreplaceProductionId%2Czone&_ste=1&h5st=20210609170825400;5241450082439161;10001;tk01w996b1b3ba8nejFaa2N6eDFniEFlrApCu0vxS7A58l/x4k637Wi5wdIFRUQvTUpyq9IBy5OA0p5gAPHx0RZFoIF0;ed9c9f27141a3172bb4f497007fcd822fd9d625b5bd61837e1793cc6ea4d03c5&_=1623146403580&sceneval=2&g_login_type=1&callback=&g_ty=ls`,
 
       // body: `functionId=HomeZeroBuy&body={"pageNum":1,"channel":"speed_app"}&appid=megatron&client=megatron&clientVersion=1.0.0`,
       headers: {
@@ -237,11 +245,20 @@ function addProduct(commodityDimId) {
     $.get(options, async (err, resp, data) => {
       try {
         console.log("addProduct", commodityDimId, data);
+        if(safeGet(data)){
+            data = JSON.parse(data);
+            if(data.ret == 0){
+                resolve()
+                return
+            }
+        }
+        reject()
         //}
       } catch (e) {
         $.logErr(e, resp);
+        reject()
       } finally {
-        resolve();
+        
       }
     });
   });
