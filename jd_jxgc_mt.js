@@ -90,12 +90,7 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
             continue;
         }
       }
-      console.log(
-          '使用账号',
-                '\033[40;33m',
-                $.UserName,
-                '\033[0m 开始抢'
-              );
+      
     //   console.log(`使用账号${$.UserName}开始抢`)
       var commodityList = ''
 
@@ -192,6 +187,12 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
   });
 
   async function refreshCommodityList(){
+    console.log(
+      '使用账号',
+            '\033[40;33m',
+            $.UserName,
+            '\033[0m 开始抢'
+          );
     var commodityList = await getCommodityList();
     if (commodityList) {
       var now = Date.now() / 1000;
