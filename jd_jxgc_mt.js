@@ -79,9 +79,13 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
         }
         continue;
       }
+      var delayMs = 100
       if ($.isNode()) {
         if(process.argv && process.argv.length > 2){
         //   console.log('process.argv', process.argv[2])
+         if(process.argv.length >3){
+            delayMs = parseInt(process.argv[3])
+         }
           if($.UserName != process.argv[2])
             continue;
         }
@@ -143,13 +147,23 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
             }
             if (
                 commodityItem.limitStartTime * 1000 - (Date.now() - delta) <
-              200
+              delayMs
             ) {
                 try {
                     await addProduct(commodityItem.commodityId);
                     console.log('抢到产品，退出程序')
                 } catch (err) {
                     console.log('没抢到', err)
+                    /**
+                     * 1411 别心急哦，还没到生产时间呢~
+                     * 1503 您来晚了，商品被抢完了~
+                     * 10004 操作太频繁，请稍后再试~
+                     */
+                    if(err ==  1503){
+                        commodityList.splice(commodityItemIndex, 1);
+                        commodityItem = null
+                        continue
+                    }
                 }
               
             }
@@ -229,6 +243,7 @@ function addProduct(commodityDimId) {
     var factoryId = "22576660";
     var deviceId = "5241450082439161";
     var time = Date.now();
+    console.log('now:', time)
     let options = {
       url: `https://m.jingxi.com//dreamfactory/userinfo/AddProduction?zone=dream_factory&factoryId=${factoryId}&deviceId=${deviceId}&commodityDimId=${commodityDimId}&replaceProductionId=&_time=${time}&_stk=_time%2CcommodityDimId%2CdeviceId%2CfactoryId%2CreplaceProductionId%2Czone&_ste=1&h5st=20210609170825400;5241450082439161;10001;tk01w996b1b3ba8nejFaa2N6eDFniEFlrApCu0vxS7A58l/x4k637Wi5wdIFRUQvTUpyq9IBy5OA0p5gAPHx0RZFoIF0;ed9c9f27141a3172bb4f497007fcd822fd9d625b5bd61837e1793cc6ea4d03c5&_=1623146403580&sceneval=2&g_login_type=1&callback=&g_ty=ls`,
 
@@ -251,17 +266,19 @@ function addProduct(commodityDimId) {
         if(safeGet(data)){
             data = JSON.parse(data);
             if(data.ret == 0){
-                resolve()
+                resolve(data.ret)
                 return
             }
+            reject(-1)
+            return reject(data.ret)
         }
-        reject()
+        reject(-1)
         //}
       } catch (e) {
         $.logErr(e, resp);
-        reject()
+        reject(-1)
       } finally {
-        
+        console.log('finally now:', Date.now())
       }
     });
   });
