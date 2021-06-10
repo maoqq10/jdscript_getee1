@@ -79,7 +79,7 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
       }
       if ($.isNode()) {
         if(process.argv && process.argv.length > 2){
-          console.log('process.argv', process.argv[2])
+        //   console.log('process.argv', process.argv[2])
           if($.UserName != process.argv[2])
             continue;
         }
