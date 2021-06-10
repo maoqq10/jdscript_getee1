@@ -77,38 +77,30 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
         }
         continue;
       }
-      var commodityList = await getCommodityList();
-      if (commodityList) {
-        var now = Date.now() / 1000;
-        var list = [];
-        commodityList.forEach((item) => {
-          if (item.limitStartTime > now) {
-            console.log(
-              `未开始的产品:${item.commodityId},${
-                item.name
-              }, 开始时间：${parseTime(item.limitStartTime)}`
-            );
-            list.push({
-              commodityId: item.commodityId,
-              name: item.name,
-              limitStartTime: item.limitStartTime,
-            });
-          }
-        });
-        function compare(property) {
-          return function (a, b) {
-            var value1 = a[property];
-            var value2 = b[property];
-            return value1 - value2;
-          };
+      if ($.isNode()) {
+        if(process.argv && process.argv.length > 2){
+          console.log('process.argv', process.argv[2])
+          if($.UserName != process.argv[2])
+            continue;
         }
-        commodityList = list.sort(compare("limitStartTime"));
-
-        console.log("list", commodityList);
       }
+      console.log(
+          '使用账号',
+                '\033[40;33m',
+                $.UserName,
+                '\033[0m 开始抢'
+              );
+    //   console.log(`使用账号${$.UserName}开始抢`)
+      var commodityList = ''
+
       var lastFixTime = 0;
       var lastTipTime = 0;
+      var lastRefreshTime = 0
       while (true) {
+        if (Date.now() - lastRefreshTime > 30 * 60 * 1000) {
+            commodityList = await refreshCommodityList()
+            lastRefreshTime = Date.now();
+        }
         var delta = 0;
         if (Date.now() - lastFixTime > 5 * 60 * 1000) {
           var time1 = Date.now();
@@ -140,10 +132,11 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
             var now = parseInt(Date.now() / 1000 - 10);
             if (commodityItem.limitStartTime - now < 10 && lastTipTime != now) {
               lastTipTime = now;
-              console.log(
+              console.log('\033[40;33m',
                 `准备抢：${commodityItem.commodityId},${
                   commodityItem.name
                 }, 倒计时：${parseInt(commodityItem.limitStartTime - now)}`
+                ,'\033[0m'
               );
             }
             if (
@@ -174,6 +167,51 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
   .finally(() => {
     $.done();
   });
+
+  async function refreshCommodityList(){
+    var commodityList = await getCommodityList();
+    if (commodityList) {
+      var now = Date.now() / 1000;
+      var list = [];
+      commodityList.forEach((item, index) => {
+        if (item.limitStartTime > now) {
+            if(index == 0){
+                console.log('\033[40;32m',
+                `下一个开始抢的产品:${item.commodityId},${
+                  item.name
+                }, 开始时间：${parseTime(item.limitStartTime)}`
+                ,'\033[0m'
+              );
+            } else {
+                console.log(
+                `未开始的产品:${item.commodityId},${
+                  item.name
+                }, 开始时间：${parseTime(item.limitStartTime)}\n`
+              );
+            }
+         
+          list.push({
+            commodityId: item.commodityId,
+            name: item.name,
+            limitStartTime: item.limitStartTime,
+            formatedTime: parseTime(item.limitStartTime)
+          });
+        }
+      });
+ 
+      function compare(property) {
+        return function (a, b) {
+          var value1 = a[property];
+          var value2 = b[property];
+          return value1 - value2;
+        };
+      }
+      commodityList = list.sort(compare("limitStartTime"));
+
+    //   console.log("list", commodityList);
+    }
+    return commodityList
+  }
 
 function addProduct(commodityDimId) {
   return new Promise(async (resolve) => {
