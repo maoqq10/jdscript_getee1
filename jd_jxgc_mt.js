@@ -53,7 +53,7 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
       $.isLogin = true;
       $.nickName = "";
       message = "";
-    //   await TotalBean();
+      //   await TotalBean();
       console.log(
         `\n******开始【京东账号${$.index}】${
           $.nickName || $.UserName
@@ -77,20 +77,94 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
         }
         continue;
       }
+      var commodityList = await getCommodityList();
+      if (commodityList) {
+        var now = Date.now() / 1000;
+        var list = [];
+        commodityList.forEach((item) => {
+          if (item.limitStartTime > now) {
+            console.log(
+              `未开始的产品:${item.commodityId},${
+                item.name
+              }, 开始时间：${parseTime(item.limitStartTime)}`
+            );
+            list.push({
+              commodityId: item.commodityId,
+              name: item.name,
+              limitStartTime: item.limitStartTime,
+            });
+          }
+        });
+        function compare(property) {
+          return function (a, b) {
+            var value1 = a[property];
+            var value2 = b[property];
+            return value1 - value2;
+          };
+        }
+        commodityList = list.sort(compare("limitStartTime"));
 
-      while(true){
-          var time =  await getJDServerTime();
-        //   console.log(time);
-          if(1623232800000 - time < 500 && time < 1623232805000){
-            await addProduct(1607);
-          }
-          if(1623236400000 - time < 500 && time < 1623236405000){
-            await addProduct(1598);
-          }
+        console.log("list", commodityList);
       }
-     
-    //   await addProduct(shopid1);
-    //   await list1();
+      var lastFixTime = 0;
+      var lastTipTime = 0;
+      while (true) {
+        var delta = 0;
+        if (Date.now() - lastFixTime > 5 * 60 * 1000) {
+          var time1 = Date.now();
+          var time = await getJDServerTime();
+          var time2 = Date.now();
+          console.log(
+            `servertime: ${time},time1: ${time1},time2: ${time2},delta: ${
+              time2 - time1
+            }`
+          );
+
+          var now = time + parseInt((time2 - time1) * 0.4);
+          delta = time2 - now;
+          console.log(`delta: ${time2 - now}`);
+          lastFixTime = Date.now();
+        }
+        if (commodityList && commodityList.length > 0) {
+          var commodityItem = false;
+          var commodityItemIndex = -1;
+          for (let index = 0; index < commodityList.length; index++) {
+            const element = commodityList[index];
+            if (element.limitStartTime > Date.now() / 1000 - 10) {
+              commodityItem = element;
+              commodityItemIndex = index;
+              break;
+            }
+          }
+          if (commodityItem) {
+            var now = parseInt(Date.now() / 1000 - 10);
+            if (commodityItem.limitStartTime - now < 10 && lastTipTime != now) {
+              lastTipTime = now;
+              console.log(
+                `准备抢：${commodityItem.commodityId},${
+                  commodityItem.name
+                }, 倒计时：${parseInt(commodityItem.limitStartTime - now)}`
+              );
+            }
+            if (
+                commodityItem.limitStartTime * 1000 - (Date.now() - delta) <
+              200
+            ) {
+              await addProduct(commodityItem.commodityId);
+            }
+            if (
+                (Date.now() - delta) - commodityItem.limitStartTime * 1000 >
+                5000 &&
+              commodityItemIndex > 0
+            ) {
+              commodityList.splice(commodityItemIndex, 1);
+            }
+            if (commodityList.length == 0) {
+              console.log("暂时没有可抢产品，退出程序");
+            }
+          }
+        }
+      }
     }
   }
 })()
@@ -103,9 +177,9 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
 
 function addProduct(commodityDimId) {
   return new Promise(async (resolve) => {
-      var factoryId = '22576660'
-      var deviceId='5241450082439161'
-      var time = Date.now()
+    var factoryId = "22576660";
+    var deviceId = "5241450082439161";
+    var time = Date.now();
     let options = {
       url: `https://m.jingxi.com//dreamfactory/userinfo/AddProduction?zone=dream_factory&factoryId=${factoryId}&deviceId=${deviceId}&commodityDimId=${commodityDimId}&replaceProductionId=&_time=${time}&_stk=_time%2CcommodityDimId%2CdeviceId%2CfactoryId%2CreplaceProductionId%2Czone&_ste=1&h5st=20210609170825400;5241450082439161;10001;tk01w996b1b3ba8nejFaa2N6eDFniEFlrApCu0vxS7A58l/x4k637Wi5wdIFRUQvTUpyq9IBy5OA0p5gAPHx0RZFoIF0;ed9c9f27141a3172bb4f497007fcd822fd9d625b5bd61837e1793cc6ea4d03c5&_=1623146403580&sceneval=2&g_login_type=1&callback=jsonpCBKQQQQ&g_ty=ls`,
 
@@ -124,7 +198,7 @@ function addProduct(commodityDimId) {
 
     $.get(options, async (err, resp, data) => {
       try {
-        console.log('addProduct',commodityDimId, data)
+        console.log("addProduct", commodityDimId, data);
         //}
       } catch (e) {
         $.logErr(e, resp);
@@ -135,31 +209,74 @@ function addProduct(commodityDimId) {
   });
 }
 
-  function getJDServerTime() {
-    return new Promise(resolve => {
-      // console.log(Date.now())
-      $.get({url: `https://jdjoy.jd.com/system/current/timestamp`,headers:{
-          "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-        }}, async (err, resp, data) => {
+function getJDServerTime() {
+  return new Promise((resolve) => {
+    // console.log(Date.now())
+    $.get(
+      {
+        url: `https://jdjoy.jd.com/system/current/timestamp`,
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88",
+        },
+      },
+      async (err, resp, data) => {
         try {
           if (err) {
-            console.log(`${JSON.stringify(err)}`)
-            console.log(`${$.name} 获取京东服务器时间失败，请检查网路重试`)
+            console.log(`${JSON.stringify(err)}`);
+            console.log(`${$.name} 获取京东服务器时间失败，请检查网路重试`);
           } else {
             data = JSON.parse(data);
             // console.log('京东时间', data)
-            $.jdTime = data['currentTime'];
+            $.jdTime = data["currentTime"];
             // console.log(data['serverTime']);
             // console.log(data['serverTime'] - Date.now())
           }
         } catch (e) {
-          $.logErr(e, resp)
+          $.logErr(e, resp);
         } finally {
           resolve($.jdTime);
         }
-      })
-    })
-  }
+      }
+    );
+  });
+}
+
+function getCommodityList() {
+  return new Promise(async (resolve) => {
+    let options = {
+      url: `https://wq.jd.com/dreamfactory/diminfo/GetCommodityList?zone=dream_factory&flag=2&_time=1623229637534&_stk=_time%2Cflag%2Czone&_ste=1&h5st=20210609170717535%3B5241450082439161%3B10001%3Btk01w996b1b3ba8nejFaa2N6eDFniEFlrApCu0vxS7A58l%2Fx4k637Wi5wdIFRUQvTUpyq9IBy5OA0p5gAPHx0RZFoIF0%3B76167d63739ed00a45e91fed6fe615da5daa47ad0891b892ae38132762808b6c&_=1623229637536&sceneval=2&g_login_type=1&callback=&g_ty=ls`,
+
+      // body: `functionId=HomeZeroBuy&body={"pageNum":1,"channel":"speed_app"}&appid=megatron&client=megatron&clientVersion=1.0.0`,
+      headers: {
+        "X-Requested-With": "com.jd.pingou",
+
+        Referer:
+          "https://wqsd.jd.com/pingou/dream_factory/?ptag=138631.26.54&trace=",
+        Host: "wq.jd.com",
+        "User-Agent":
+          "jdpingou;android;4.9.0;10;0e92e7b74efa958c;network/wifi;model/Redmi K20 Pro Premium Edition;appBuild/16879;partner/xiaomi;;session/87;aid/0e92e7b74efa958c;oaid/714ff586b4c02bcb;pap/JA2019_3111789;brand/Xiaomi;eu/0356932356732673;fv/4356661693538336;Mozilla/5.0 (Linux; Android 10; Redmi K20 Pro Premium Edition Build/QKQ1.190825.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.101 Mobile",
+        Cookie: cookie,
+      },
+    };
+    var result = "";
+    $.get(options, async (err, resp, data) => {
+      try {
+        // $.log("产品列表：" + data);
+        if (safeGet(data)) {
+          var dat = JSON.parse(data);
+          if (dat && dat.data && dat.data.commodityList) {
+            result = dat.data.commodityList;
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve(result);
+      }
+    });
+  });
+}
 
 function list1() {
   return new Promise(async (resolve) => {
@@ -291,6 +408,43 @@ function jsonParse(str) {
       return [];
     }
   }
+}
+
+function parseTime(time, cFormat) {
+  if (arguments.length === 0) {
+    return null;
+  }
+  const format = cFormat || "{y}-{m}-{d} {h}:{i}:{s}";
+  let date;
+  if (typeof time === "object") {
+    date = time;
+  } else {
+    if (("" + time).length === 10) time = parseInt(time) * 1000;
+    date = new Date(time);
+  }
+  var offset = new Date("2018-08-08T00:00:00").getHours();
+  if (offset !== 0) {
+    date.setTime(date.getTime() - offset * 60 * 60 * 1000);
+  }
+  const formatObj = {
+    y: date.getFullYear(),
+    m: date.getMonth() + 1,
+    d: date.getDate(),
+    h: date.getHours(),
+    i: date.getMinutes(),
+    s: date.getSeconds(),
+    a: date.getDay(),
+  };
+  const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
+    let value = formatObj[key];
+    if (key === "a")
+      return ["一", "二", "三", "四", "五", "六", "日"][value - 1];
+    if (result.length > 0 && value < 10) {
+      value = "0" + value;
+    }
+    return value || 0;
+  });
+  return time_str;
 }
 // prettier-ignore
 
