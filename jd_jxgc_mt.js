@@ -183,20 +183,7 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
       var list = [];
       commodityList.forEach((item, index) => {
         if (item.limitStartTime > now) {
-            if(index == 0){
-                console.log('\033[40;32m',
-                `下一个开始抢的产品:${item.commodityId},${
-                  item.name
-                }, 开始时间：${parseTime(item.limitStartTime)}`
-                ,'\033[0m'
-              );
-            } else {
-                console.log(
-                `未开始的产品:${item.commodityId},${
-                  item.name
-                }, 开始时间：${parseTime(item.limitStartTime)}\n`
-              );
-            }
+            
          
           list.push({
             commodityId: item.commodityId,
@@ -206,7 +193,7 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
           });
         }
       });
- 
+      
       function compare(property) {
         return function (a, b) {
           var value1 = a[property];
@@ -215,7 +202,22 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
         };
       }
       commodityList = list.sort(compare("limitStartTime"));
-
+      commodityList.forEach((item, index) => {
+        if(index == 0){
+            console.log('\033[40;32m',
+            `下一个开始抢的产品:${item.commodityId},${
+              item.name
+            }, 开始时间：${parseTime(item.limitStartTime)}`
+            ,'\033[0m'
+          );
+        } else {
+            console.log(
+            `未开始的产品:${item.commodityId},${
+              item.name
+            }, 开始时间：${parseTime(item.limitStartTime)}\n`
+          );
+        }
+      })
     //   console.log("list", commodityList);
     }
     return commodityList
