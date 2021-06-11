@@ -97,6 +97,8 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
       var lastFixTime = 0;
       var lastTipTime = 0;
       var lastRefreshTime = 0
+      var lastChangeDelayTime = 0
+      
       while (true) {
         if (Date.now() - lastRefreshTime > 30 * 60 * 1000) {
             commodityList = await refreshCommodityList()
@@ -130,7 +132,7 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
             }
           }
           if (commodityItem) {
-            var now = parseInt(Date.now() / 1000 - 10);
+            var now = parseInt(Date.now() / 1000) - delta;
             if (commodityItem.limitStartTime - now < 10 && lastTipTime != now) {
               lastTipTime = now;
               console.log('\033[40;33m',
@@ -146,7 +148,7 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
             ) {
                 try {
                     await addProduct(commodityItem.commodityId);
-                    console.log('抢到产品，退出程序')
+                    console.log('抢到产品，退出程序,延时为：', delayMs)
                 } catch (err) {
                     console.log('没抢到', err)
                     /**
@@ -155,9 +157,22 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
                      * 10004 操作太频繁，请稍后再试~
                      */
                     if(err ==  1503){
+                      if(Date.now() - lastChangeDelayTime > 60 * 1000){
+                        lastChangeDelayTime = Date.now()
+                        delayMs += 20
+                        console.log('调整延时为：', delayMs)
+                      }
                         commodityList.splice(commodityItemIndex, 1);
                         commodityItem = null
                         continue
+                    } 
+                    if(err ==  1411){
+                      if(Date.now() - lastChangeDelayTime > 60 * 1000){
+                        lastChangeDelayTime = Date.now()
+                        delayMs -= 20
+                        console.log('调整延时为：', delayMs)
+                      }
+                      
                     }
                 }
               
@@ -270,7 +285,6 @@ function addProduct(commodityDimId) {
                 resolve(data.ret)
                 return
             }
-            reject(-1)
             return reject(data.ret)
         }
         reject(-1)
