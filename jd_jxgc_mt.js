@@ -109,15 +109,15 @@ const JD_API_HOST = "https://api.m.jd.com/client.action";
           var time1 = Date.now();
           var time = await getJDServerTime();
           var time2 = Date.now();
-          console.log(
-            `servertime: ${time},time1: ${time1},time2: ${time2},delta: ${
-              time2 - time1
-            }`
-          );
+          // console.log(
+          //   `servertime: ${time},time1: ${time1},time2: ${time2},delta: ${
+          //     time2 - time1
+          //   }`
+          // );
 
           var now = time + parseInt((time2 - time1) * 0.4);
           delta = time2 - now;
-          console.log(`delta: ${time2 - now}`);
+          // console.log(`delta: ${time2 - now}`);
           lastFixTime = Date.now();
         }
         if (commodityList && commodityList.length > 0) {
