@@ -90,25 +90,30 @@ const JD_API_HOST = "https://api.m.jd.com";
   });
 
 async function help(inviteId) {
-  await isvObfuscator();
-  if ($.isvObfuscatorToken) {
-    await auth($.isvObfuscatorToken);
-    if ($.authToken) {
-      try {
-        await invite(inviteId, $.authToken);
-        if ($.shopId) {
-          await openCard(inviteId, $.authToken, $.shopId);
-        }
-      } catch (error) {}
+  try {
+    await isvObfuscator();
+    if ($.isvObfuscatorToken) {
+      await auth($.isvObfuscatorToken);
+      if ($.authToken) {
+        try {
+          await invite(inviteId, $.authToken);
+          if ($.shopId) {
+            await openCard(inviteId, $.authToken, $.shopId);
+          }
+        } catch (error) {}
+      }
+    } else {
+      $.log(
+        "",
+        `❌ ${$.name}, isvObfuscator失败! 原因: ${$.isvObfuscatorToken.message}!`,
+        ""
+      );
+      return;
     }
-  } else {
-    $.log(
-      "",
-      `❌ ${$.name}, isvObfuscator失败! 原因: ${$.isvObfuscatorToken.message}!`,
-      ""
-    );
-    return;
+  } catch (error) {
+    
   }
+
 }
 
 function isvObfuscator() {
