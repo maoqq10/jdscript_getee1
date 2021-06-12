@@ -114,13 +114,12 @@ async function help(inviteId) {
 function isvObfuscator() {
   return new Promise((resolve) => {
     const option = {
-      url: `${JD_API_HOST}/client.action?functionId=isvObfuscator&clientVersion=10.0.2&build=88569&client=android&d_brand=Xiaomi&d_model=RedmiK20ProPremiumEdi&osVersion=10&screen=2296*1080&partner=xiaomi001&oaid=714ff586b4c02bcb&openudid=0e92e7b74efa958c&eid=eidAba2f812162sehtzdT2WbTXW0XVI2js06x4bc3r3cvWC2+y/08tMoIoyX37LZWt+v62E40X9A8Gd0vpb5naKuoflbrX+KJJctxb8fJK3Ed+Vq4Ktu&sdkVersion=29&lang=zh_CN&uuid=0e92e7b74efa958c&aid=0e92e7b74efa958c&area=20_1761_25188_51466&networkType=wifi&wifiBssid=dd5c2540481bb2dffc9f240ca9ff0689&uts=0f31TVRjBSsqndu4%2FjgUPz6uymy50MQJXcpAMFN8AK7vWDDNK9d5p9ELvUrjqEEMHNURNclsSD19YYe7aVjEt2tFsJ0ogyO1Xx%2FD1kfff5GSArjnLIP%2FbzFgQ8aEM8l2HzOMq8lKJfCtYbCcXpObANaSnvIH19hmL%2BRuXPeaW7IfFJidfCk2J405Cahhm8dY2G2%2FC7suq9d2iZr1MH3Orw%3D%3D&uemps=0-0&st=1623421336320&sign=4dafb59030cdfc3409c8232fef56546f&sv=112`,
-      body: "body=%7B%22id%22%3A%22%22%2C%22url%22%3A%22https%3A%2F%2Fxinruism618-isv.isvjcloud.com%22%7D",
+      url: `${JD_API_HOST}/client.action?functionId=isvObfuscator&clientVersion=10.0.2&build=88569&client=android&d_brand=Xiaomi&d_model=RedmiK20ProPremiumEdi&osVersion=10&screen=2296*1080&partner=xiaomi001&oaid=714ff586b4c02bcb&openudid=760da75670a64eb787f49309093673bb&eid=eidAaa7941206cl555f5a2d68196d5a4fb5d74b020218283ad2bf8f1PeY528/TtFzA1DjxPYAIXbayoJHs25NljNEG9fAjcQg4KI0FIfCwl81WSIZj&sdkVersion=29&lang=zh_CN&uuid=0e92e7b74efa958c&aid=0e92e7b74efa958c&area=20_1761_25188_59206&networkType=wifi&wifiBssid=cbc3a178b821437bba88c749b4a28bce&uts=0f31TVRjBSsqndu4%2FjgUPz6uymy50MQJqhUIRiJ7PRktK7Mz0%2B3gUknr1%2BdStO2O9%2BuS1gXc3NQbqYMhUbu%2F98PKM1O6ix4V6L1JwtKRA3SW9af1nfXL9HZYxjacqh1Vg8ikaLPu3ByPmC2yWim7UVs7ugWBtUg1Z7H7BSLj%2BkM3zb8ytGLPwNasW%2BbgqfZlFwBGizPO3CFJgqBehhyZIA%3D%3D&uemps=0-0&st=1623470473776&sign=10faba98adb7874260acc73ce4ca6231&sv=122`,
+      body: "body=%7B%22id%22%3A%22%22%2C%22url%22%3A%22https%3A%2F%2Fxinruism618-isv.isvjcloud.com%22%7D&",
       headers: {
         Host: "api.m.jd.com",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         Cookie: cookie,
-        reqSource: "h5",
         Connection: "keep-alive",
         Accept: "*/*",
         "User-Agent": $.isNode()
