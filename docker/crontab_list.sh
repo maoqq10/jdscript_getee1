@@ -1,5 +1,5 @@
 # 拉最新代码
-15 * * * * git pull
+5/15 * * * * git pull
 # 每3天的23:50分清理一次日志(互助码不清理，proc_file.sh对该文件进行了去重)
 50 23 */3 * * find /scripts/logs -name '*.log' | grep -v 'sharecodeCollection' | xargs rm -rf
 #收集助力码
@@ -7,6 +7,7 @@
 
 ##############短期活动##############
 #京东极速版红包(活动时间：2021-3-8至2021-3-25)
+1 0 * * * node /scripts/jd_speed_redpocke.js update >> /scripts/logs/jd_speed_redpocke_update.log 2>&1
 15/30 * * * * node /scripts/jd_speed_redpocke.js >> /scripts/logs/jd_speed_redpocke.log 2>&1
 
 #女装盲盒 活动时间：2021-03-22到2021-03-31

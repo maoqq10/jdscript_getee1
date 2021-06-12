@@ -96,10 +96,25 @@ if ($.isNode()) {
         }
         continue;
       }
-      if(process.argv && process.argv.length > 3){
-        console.log('process.argv', process.argv[2])
-        await helpOpenRedEnvelopeInteract(process.argv[2], process.argv[3],"2");
-        continue;
+      if ($.isNode()) {
+        if(process.argv && process.argv.length > 3){
+          console.log('process.argv', process.argv[2])
+          if(process.argv.length == 4){
+            await helpOpenRedEnvelopeInteract(process.argv[2], process.argv[3], "2");
+          } else if(process.argv.length == 5){
+            await helpOpenRedEnvelopeInteract(process.argv[2], process.argv[3]);
+          } 
+          continue;
+        }
+      }
+      if ($.isNode()) {
+        if(process.argv && process.argv.length > 2){
+          console.log('process.argv', process.argv[2])
+          if(process.argv[2] == "update"){
+            await redEnvelopeInteractHome("","","");
+            continue;
+          } 
+        }
       }
       await springRewardQuery();
       await shareCodesFormat();
@@ -550,7 +565,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
           } else {
             if (safeGet(data)) {
               data = JSON.parse(data);
-              
+
               result = data
               if (data.code === 0) {
                 if (
@@ -570,6 +585,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
                   console.log(helpType == "1" ?  `助力省钱大赢家失败;` : "助力省钱大赢家提现失败", data);
                 }
                 if (data.data && data.data.redEnvelopeId) {
+                  console.log('更新redEnvelopeId',$.UserName, data.data.redEnvelopeId)
                   shareCodeApi.setShareCodeInfo1(
                     $.UserName,
                     shareCodeType,
@@ -592,7 +608,7 @@ function helpOpenRedEnvelopeInteract(shareCode, redEnvelopeId, helpType = "1") {
   });
 }
 
-function redEnvelopeInteractHome(shareCode, redEnvelopeId) {
+function redEnvelopeInteractHome(shareCode, redEnvelopeId, helpType="1") {
   return new Promise((resolve) => {
     var result = {}
     $.get(
@@ -600,7 +616,7 @@ function redEnvelopeInteractHome(shareCode, redEnvelopeId) {
         linkId: "DA4SkG7NXupA9sksI00L0g",
         redEnvelopeId: redEnvelopeId,
         inviter: shareCode,
-        helpType: "1",
+        helpType: helpType,
       }),
       async (err, resp, data) => {
         try {
@@ -616,6 +632,14 @@ function redEnvelopeInteractHome(shareCode, redEnvelopeId) {
                 console.log(
                   `助力省钱大赢家redEnvelopeInteractHome成功;${data.data.amount}`
                 );
+                if (data.data && data.data.redEnvelopeId) {
+                  console.log('更新redEnvelopeId',$.UserName, data.data.redEnvelopeId)
+                  shareCodeApi.setShareCodeInfo1(
+                    $.UserName,
+                    shareCodeType,
+                    data.data.redEnvelopeId
+                  );
+                }
               } else {
                 console.log(data.errMsg);
                 console.log(
